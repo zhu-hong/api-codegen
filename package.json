@@ -1,0 +1,35 @@
+{
+  "name": "d2m-apigen",
+  "private": false,
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "d2m-apigen": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript",
+    "prepublishOnly": "pnpm build"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.8.3",
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/node": "^22.5.2",
+    "axios": "^1.7.7",
+    "openapi3-ts": "^4.4.0",
+    "rollup": "^4.21.2",
+    "tslib": "^2.7.0",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.7.0",
+    "@orval/core": "7.1.0",
+    "execa": "^9.3.1",
+    "orval-effect": "7.1.0",
+    "picocolors": "^1.0.1"
+  }
+}
