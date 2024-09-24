@@ -10,7 +10,7 @@ import {
 } from '@orval/core'
 import { _effect_generateContextSpecs, _effect_getApiGenerate } from 'orval-effect'
 
-const IMPORT_AXIOS = `import { _http } from './_http'`
+const IMPORT_AXIOS = `import { _http } from './_http.ts'`
 const workspace = process.cwd()
 
 async function main() {
@@ -23,7 +23,7 @@ async function main() {
 
   const schemaAddress = await p.text({
     message: 'Swagger-Schema(一个相对地址或网络地址)',
-    placeholder: 'http://192.168.3.200/swagger/v1/swagger.json',
+    placeholder: 'openapi.schema.json',
     validate: (value) => {
       if (!value.trim()) return '没有没有没有'
     },
@@ -39,7 +39,6 @@ async function main() {
     output: {
       target: upath.resolve(workspace, 'src/api/'),
       mode: 'tags',
-      baseUrl: '/api',
       override: {
         mutator: {
           path: upath.resolve(workspace, 'src/api/_http.ts'),

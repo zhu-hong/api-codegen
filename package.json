@@ -14,22 +14,23 @@
     "prepublishOnly": "pnpm build"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.8.3",
-    "@rollup/plugin-commonjs": "^26.0.1",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-typescript": "^11.1.6",
-    "@types/node": "^22.5.2",
+    "@biomejs/biome": "1.9.2",
+    "@rollup/plugin-commonjs": "^28.0.0",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-typescript": "^12.1.0",
+    "@types/node": "^22.6.1",
     "axios": "^1.7.7",
+    "fdir": "^6.3.0",
     "openapi3-ts": "^4.4.0",
-    "rollup": "^4.21.2",
+    "rollup": "^4.22.4",
     "tslib": "^2.7.0",
-    "typescript": "^5.5.4"
+    "typescript": "^5.6.2"
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
-    "@orval/core": "7.1.0",
-    "execa": "^9.3.1",
-    "orval-effect": "7.1.0",
-    "picocolors": "^1.0.1"
+    "@orval/core": "^7.1.1",
+    "execa": "^9.4.0",
+    "orval-effect": "^7.1.1",
+    "picocolors": "^1.1.0"
   }
 }
