@@ -1,4 +1,4 @@
-import { readFile, writeFile } from 'node:fs/promises'
+import { writeFile } from 'node:fs/promises'
 import { execa } from 'execa'
 import * as p from '@clack/prompts'
 import pc from 'picocolors'
@@ -14,7 +14,7 @@ const workspace = process.cwd()
 
 async function main() {
 	console.clear()
-	p.intro(`V_${pc.bgYellow(pc.red('1.0.4'))}`)
+	p.intro(`V_${pc.bgYellow(pc.red('1.0.5'))}`)
 
 	const spin = p.spinner()
 
