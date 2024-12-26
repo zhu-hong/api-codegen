@@ -3,7 +3,7 @@ import { execa } from 'execa'
 import * as p from '@clack/prompts'
 import pc from 'picocolors'
 import type { SchemasObject } from 'openapi3-ts/oas30'
-import { generateSchemasDefinition, upath, kebab } from '@orval/core'
+import { generateSchemasDefinition, upath, kebab, pascal } from '@orval/core'
 import {
 	_effect_generateContextSpecs,
 	_effect_getApiGenerate,
@@ -14,13 +14,13 @@ const workspace = process.cwd()
 
 async function main() {
 	console.clear()
-	p.intro(`V_${pc.bgYellow(pc.red('1.0.5'))}`)
+	p.intro(`V_${pc.bgYellow(pc.red('1.0.6'))}`)
 
 	const spin = p.spinner()
 
 	let argSchemaAddress = process.argv.slice(2)[0]
 
-	if(!argSchemaAddress?.trim()) {
+	if (!argSchemaAddress?.trim()) {
 		const schemaAddress = await p.text({
 			message: 'schema',
 			placeholder: 'openapi.schema.json',
@@ -28,7 +28,7 @@ async function main() {
 				if (!value.trim()) return '没有没有没有'
 			},
 		})
-	
+
 		if (p.isCancel(schemaAddress)) {
 			process.exit(0)
 		}
@@ -119,7 +119,7 @@ async function main() {
 		const schemaRaw = `${
 			apiSchemaImports.length === 0
 				? ''
-				: `import type {${[...new Set(apiSchemaImports.map(({ schemaName }) => schemaName))].join(',')},} from './_models.gen'
+				: `import type {${[...new Set(apiSchemaImports.map(({ schemaName }) => pascal(schemaName!)))].join(',')},} from './_models.gen'
 
 `
 		}${[...new Set(apiImports.map(({ name }) => name))].map((name) => apiSchemas.find((s) => s.name === name)?.model).join('\n')}`
@@ -134,7 +134,7 @@ async function main() {
 		const implementationRaw = `${
 			schemaImports.length === 0
 				? ''
-				: `import type {${[...new Set(schemaImports.map(({ schemaName }) => schemaName))].join(',')},} from './_models.gen'
+				: `import type {${[...new Set(schemaImports.map(({ schemaName }) => pascal(schemaName!)))].join(',')},} from './_models.gen'
 `
 		}${
 			apiImports.length === 0
@@ -174,6 +174,4 @@ ${implementations.map((implementation) => implementation).join('\n')}`
 	p.outro('✅')
 }
 
-main().catch((error) =>
-	console.error('❌', error),
-)
+main().catch((error) => console.error('❌', error))
