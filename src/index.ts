@@ -14,7 +14,7 @@ const workspace = process.cwd()
 
 async function main() {
 	console.clear()
-	p.intro(`V_${pc.bgYellow(pc.red('1.0.6'))}`)
+	p.intro(`V_${pc.bgYellow(pc.red('1.0.7'))}`)
 
 	const spin = p.spinner()
 
