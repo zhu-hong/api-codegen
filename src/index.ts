@@ -2,8 +2,9 @@ import { writeFile } from 'node:fs/promises'
 import { execa } from 'execa'
 import * as p from '@clack/prompts'
 import pc from 'picocolors'
+import pLimit from 'p-limit'
 import type { SchemasObject } from 'openapi3-ts/oas30'
-import { generateSchemasDefinition, upath, kebab, pascal } from '@orval/core'
+import { generateSchemasDefinition, upath, kebab } from '@orval/core'
 import {
 	_effect_generateContextSpecs,
 	_effect_getApiGenerate,
@@ -13,15 +14,14 @@ const IMPORT_HEAD = `import { _http } from './_http.ts'`
 const workspace = process.cwd()
 
 async function main() {
-	console.clear()
-	p.intro(`V_${pc.bgYellow(pc.red('1.0.7'))}`)
+	p.intro(`V_${pc.bgYellowBright(pc.green('1.0.8'))}`)
 
 	const spin = p.spinner()
 
-	let argSchemaAddress = process.argv.slice(2)[0]
-
-	if (!argSchemaAddress?.trim()) {
-		const schemaAddress = await p.text({
+	// 命令行带参数就跳过手输
+	let schemaAddress = process.argv.slice(2)[0]
+	if (!schemaAddress?.trim()) {
+		const schemaAddressInput = await p.text({
 			message: 'schema',
 			placeholder: 'openapi.schema.json',
 			validate: (value) => {
@@ -29,17 +29,17 @@ async function main() {
 			},
 		})
 
-		if (p.isCancel(schemaAddress)) {
+		if (p.isCancel(schemaAddressInput)) {
 			process.exit(0)
 		}
 
-		argSchemaAddress = schemaAddress
+		schemaAddress = schemaAddressInput
 	}
 
-	spin.start('生成上下文')
+	spin.start('gen context')
 	const { specValue, input, ...contextSpecs } =
 		await _effect_generateContextSpecs({
-			input: argSchemaAddress,
+			input: schemaAddress,
 			output: {
 				target: upath.resolve(workspace, 'src/api/'),
 				mode: 'tags',
@@ -50,114 +50,122 @@ async function main() {
 					},
 				},
 			},
-		}).finally(() => spin.stop('生成上下文'))
+		}).finally(() => spin.stop('gen context'))
 
 	try {
-		spin.start('生成模型文件')
+		spin.start('gen common schema')
 		const schemasDefinition = generateSchemasDefinition(
 			specValue?.components?.schemas as SchemasObject,
 			contextSpecs,
 			'',
 		)
+		// 所有的通用模型（#/components/schemas）不分组写入一个文件
 		await writeFile(
-			upath.resolve(workspace, 'src/api/_models.gen.ts'),
+			upath.resolve(workspace, 'src/api/_schemas.gen.ts'),
 			schemasDefinition.map((s) => s.model).join('\n'),
 		)
 	} finally {
-		spin.stop('生成模型文件')
+		spin.stop('gen common schema')
 	}
 
-	spin.start('生成接口模型')
+	spin.start('gen api schema')
 	const { operations: apiOperations, schemas: apiSchemas } =
 		await _effect_getApiGenerate({
 			input,
 			output: contextSpecs.output,
 			context: contextSpecs,
-		}).finally(() => spin.stop('生成接口模型'))
+		}).finally(() => spin.stop('gen api schema'))
 
-	const operationValues = Object.values(apiOperations)
+	const apiOperationValues = Object.values(apiOperations)
 
-	const tags = [...new Set(operationValues.map(({ tags }) => tags).flat())]
+	const tags = [...new Set(apiOperationValues.map(({ tags }) => tags).flat())]
 
-	const apiGenerates = tags.map(async (tag) => {
-		const operations = operationValues.filter(({ tags }) => tags.includes(tag))
-		/**
-		 * 统计出tag用哪些接口函数，以及用到了哪些schema，schema有引用了哪些modelSchema
-		 */
-		const implementations = operations.map(
-			({ implementation }) => implementation,
-		)
-
-		type Imports = (typeof operations)[number]['imports']
-
-		// 接口要的request/response模型
-		const apiImports: Imports = []
-		// request/response模型要的模型
-		const apiSchemaImports: Imports = []
-		// 接口要的模型
-		const schemaImports: Imports = []
-
-		operations
-			.map(({ imports }) => imports)
-			.flat()
-			.forEach((imports) => {
-				if (imports.schemaName) {
-					schemaImports.push(imports)
-					return
-				}
-
-				apiImports.push(imports)
-
-				const target = apiSchemas.find((schema) => schema.name === imports.name)
-				if (target !== undefined) {
-					apiSchemaImports.push(
-						...target.imports.filter(({ schemaName }) => schemaName),
-					)
-				}
-			})
-
-		const schemaRaw = `${
-			apiSchemaImports.length === 0
-				? ''
-				: `import type {${[...new Set(apiSchemaImports.map(({ schemaName }) => pascal(schemaName!)))].join(',')},} from './_models.gen'
-
-`
-		}${[...new Set(apiImports.map(({ name }) => name))].map((name) => apiSchemas.find((s) => s.name === name)?.model).join('\n')}`
-
-		if (schemaRaw.trim().length > 0) {
-			await writeFile(
-				upath.resolve(workspace, `src/api/${kebab(tag)}.schema.ts`),
-				schemaRaw,
+	const limit = pLimit(3)
+	const apiFileGenerates = tags.map((tag) =>
+		limit(async () => {
+			const operations = apiOperationValues.filter(({ tags }) =>
+				tags.includes(tag),
 			)
-		}
+			/**
+			 * 统计出tag用哪些接口函数，以及用到了哪些schema，schema有引用了哪些modelSchema
+			 */
+			const implementations = operations.map(
+				({ implementation }) => implementation,
+			)
 
-		const implementationRaw = `${
-			schemaImports.length === 0
-				? ''
-				: `import type {${[...new Set(schemaImports.map(({ schemaName }) => pascal(schemaName!)))].join(',')},} from './_models.gen'
+			type Imports = (typeof operations)[number]['imports']
+
+			// 这是接口函数文件用到的通用schema
+			const commonSchemaImports: Imports = []
+			// 这是接口函数文件用到的特用schema
+			const schemaImports: Imports = []
+			// 这是接口函数特用schema用到的通用schema
+			const schemaCommonImports: Imports = []
+
+			operations
+				.map(({ imports }) => imports)
+				.flat()
+				.forEach((meta) => {
+					// 这是接口函数文件用到的通用schema
+					if (meta.schemaName) {
+						commonSchemaImports.push(meta)
+						return
+					}
+
+					// 这是接口函数文件用到的特用schema
+					schemaImports.push(meta)
+
+					const target = apiSchemas.find((schema) => schema.name === meta.name)
+					if (target !== undefined) {
+						// 这是接口函数特用schema用到的通用schema
+						schemaCommonImports.push(
+							...target.imports.filter(({ schemaName }) => schemaName),
+						)
+					}
+				})
+
+			// [tag].schema.ts
+			const schemaRaw = `${
+				schemaCommonImports.length === 0
+					? ''
+					: `import type {${[...new Set(schemaCommonImports.map(({ name }) => name))].join(',')},} from './_schemas.gen'
 `
-		}${
-			apiImports.length === 0
-				? ''
-				: `import type {${[...new Set(apiImports.map(({ name }) => name))].join(',')},} from './${kebab(tag)}.schema'
+			}${[...new Set(schemaImports.map(({ name }) => name))].map((name) => apiSchemas.find((s) => s.name === name)?.model).join('\n')}`
+			if (schemaRaw.trim().length > 0) {
+				await writeFile(
+					upath.resolve(workspace, `src/api/${kebab(tag)}.schema.ts`),
+					schemaRaw,
+				)
+			}
+
+			// [tag].ts
+			const implementationRaw = `${
+				commonSchemaImports.length === 0
+					? ''
+					: `import type {${[...new Set(commonSchemaImports.map(({ name }) => name))].join(',')},} from './_schemas.gen'
 `
-		}${IMPORT_HEAD}
+			}${
+				schemaImports.length === 0
+					? ''
+					: `import type {${[...new Set(schemaImports.map(({ name }) => name))].join(',')},} from './${kebab(tag)}.schema'
+`
+			}${IMPORT_HEAD}
 
 ${implementations.map((implementation) => implementation).join('\n')}`
+			if (implementationRaw.trim().length > 0) {
+				await writeFile(
+					upath.resolve(workspace, `src/api/${kebab(tag)}.ts`),
+					implementationRaw,
+				)
+			}
+		}),
+	)
 
-		if (implementationRaw.trim().length > 0) {
-			await writeFile(
-				upath.resolve(workspace, `src/api/${kebab(tag)}.ts`),
-				implementationRaw,
-			)
-		}
-	})
-
-	spin.start('生成接口文件')
-	await Promise.all(apiGenerates).finally(() => spin.stop('生成接口文件'))
+	spin.start('gen api file')
+	await Promise.all(apiFileGenerates).finally(() => spin.stop('gen api file'))
 
 	try {
-		spin.start('尝试格式化')
+		spin.start('format')
 		await execa('pnpm', [
 			'biome',
 			'format',
@@ -166,12 +174,13 @@ ${implementations.map((implementation) => implementation).join('\n')}`
 			'--quote-style=single',
 			'--semicolons=as-needed',
 		])
-		spin.stop('尝试格式化')
+		spin.stop('format')
 	} catch {
-		spin.stop('尝试格式化')
+		// 即使错误也不耽误
+		spin.stop('❌ format')
 	}
 
-	p.outro('✅')
+	p.outro('通过')
 }
 
 main().catch((error) => console.error('❌', error))

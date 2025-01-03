@@ -1,7 +1,7 @@
 {
 	"name": "d2m-apigen",
 	"private": false,
-	"version": "1.0.7",
+	"version": "1.0.8",
 	"type": "module",
 	"bin": {
 		"d2m-apigen": "dist/index.js"
@@ -29,6 +29,7 @@
 		"@orval/core": "^7.3.0",
 		"execa": "^9.5.2",
 		"orval-effect": "^7.3.0",
+		"p-limit": "^6.2.0",
 		"picocolors": "^1.1.1"
 	},
 	"resolutions": {
