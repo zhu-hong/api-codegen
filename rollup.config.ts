@@ -12,6 +12,7 @@ export default defineConfig({
 		'execa',
 		'orval',
 		'orval-effect',
+		'p-limit',
 	],
 	plugins: [commonjs(), nodeResolve(), typescript()],
 	output: {
