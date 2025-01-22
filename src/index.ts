@@ -1,20 +1,28 @@
 import { writeFile } from 'node:fs/promises'
-import { execa } from 'execa'
 import * as p from '@clack/prompts'
 import pc from 'picocolors'
-import pLimit from 'p-limit'
 import type { SchemasObject } from 'openapi3-ts/oas30'
-import { generateSchemasDefinition, upath, kebab } from '@orval/core'
+import {
+	generateSchemasDefinition,
+	generateComponentDefinition,
+	generateParameterDefinition,
+	upath,
+	kebab,
+	RefComponentSuffix,
+} from '@orval/core'
 import {
 	_effect_generateContextSpecs,
 	_effect_getApiGenerate,
+	getAllSchemas,
 } from 'orval-effect'
+import pLimit from 'p-limit'
+import { execa } from 'execa'
 
 const IMPORT_HEAD = `import { _http } from './_http.ts'`
 const workspace = process.cwd()
 
 async function main() {
-	p.intro(`V_${pc.bgYellowBright(pc.green('1.0.8'))}`)
+	p.intro(`V_${pc.bgYellowBright(pc.green('1.1.0'))}`)
 
 	const spin = p.spinner()
 
@@ -37,32 +45,68 @@ async function main() {
 	}
 
 	spin.start('gen context')
-	const { specValue, input, ...contextSpecs } =
-		await _effect_generateContextSpecs({
-			input: schemaAddress,
-			output: {
-				target: upath.resolve(workspace, 'src/api/'),
-				mode: 'tags',
-				override: {
-					mutator: {
-						path: upath.resolve(workspace, 'src/api/_http.ts'),
-						name: '_http',
-					},
+	const contextSpecs = await _effect_generateContextSpecs({
+		input: schemaAddress,
+		output: {
+			target: upath.resolve(workspace, 'src/api/'),
+			mode: 'tags',
+			override: {
+				mutator: {
+					path: upath.resolve(workspace, 'src/api/_http.ts'),
+					name: '_http',
 				},
 			},
-		}).finally(() => spin.stop('gen context'))
+		},
+	}).finally(() => spin.stop('gen context'))
+
+	const [specKey, spec] = Object.entries(contextSpecs.specs)[0]
+
+	const context = {
+		output: contextSpecs.output,
+		specKey,
+		specs: contextSpecs.specs,
+		target: contextSpecs.target,
+		workspace: contextSpecs.workspace,
+	}
 
 	try {
 		spin.start('gen common schema')
+
+		const parsedSchemas = spec.openapi
+			? (spec.components?.schemas as SchemasObject)
+			: getAllSchemas(spec, specKey)
+
 		const schemasDefinition = generateSchemasDefinition(
-			specValue?.components?.schemas as SchemasObject,
-			contextSpecs,
-			'',
+			parsedSchemas,
+			context,
+			RefComponentSuffix.schemas,
+		)
+		const responseDefinition = generateComponentDefinition(
+			spec.components?.responses,
+			context,
+			RefComponentSuffix.responses,
+		)
+		const bodyDefinition = generateComponentDefinition(
+			spec.components?.requestBodies,
+			context,
+			RefComponentSuffix.requestBodies,
+		)
+		const parameters = generateParameterDefinition(
+			spec.components?.parameters,
+			context,
+			RefComponentSuffix.parameters,
 		)
 		// 所有的通用模型（#/components/schemas）不分组写入一个文件
 		await writeFile(
 			upath.resolve(workspace, 'src/api/_schemas.gen.ts'),
-			schemasDefinition.map((s) => s.model).join('\n'),
+			[
+				...schemasDefinition,
+				...responseDefinition,
+				...bodyDefinition,
+				...parameters,
+			]
+				.map((s) => s.model)
+				.join('\n'),
 		)
 	} finally {
 		spin.stop('gen common schema')
@@ -71,9 +115,9 @@ async function main() {
 	spin.start('gen api schema')
 	const { operations: apiOperations, schemas: apiSchemas } =
 		await _effect_getApiGenerate({
-			input,
+			context,
+			input: contextSpecs.input,
 			output: contextSpecs.output,
-			context: contextSpecs,
 		}).finally(() => spin.stop('gen api schema'))
 
 	const apiOperationValues = Object.values(apiOperations)
@@ -180,7 +224,7 @@ ${implementations.map((implementation) => implementation).join('\n')}`
 		spin.stop('❌ format')
 	}
 
-	p.outro('通过')
+	p.outro('通过通过通过')
 }
 
 main().catch((error) => console.error('❌', error))
