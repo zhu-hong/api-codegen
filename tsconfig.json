@@ -1,12 +1,5 @@
 {
-	"exclude": [
-		"node_modules",
-		"dist",
-		"__tests__",
-		"**/*.test*",
-		"**/*.spec*",
-		"**/api/*.*"
-	],
+	"exclude": ["node_modules", "dist", "__tests__", "**/*.test*", "**/*.spec*"],
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"compilerOptions": {
 		"target": "ESNext",

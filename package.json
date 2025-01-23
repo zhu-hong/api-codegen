@@ -8,6 +8,7 @@
 	},
 	"files": ["dist"],
 	"scripts": {
+		"dev": "vite",
 		"build": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript",
 		"format": "biome format --write . --use-editorconfig=true",
 		"prepublishOnly": "pnpm build"
@@ -17,7 +18,7 @@
 		"@rollup/plugin-commonjs": "^28.0.2",
 		"@rollup/plugin-node-resolve": "^16.0.0",
 		"@rollup/plugin-typescript": "^12.1.2",
-		"@types/node": "^22.10.7",
+		"@types/node": "^22.10.8",
 		"axios": "^1.7.9",
 		"openapi3-ts": "^4.4.0",
 		"rollup": "^4.31.0",
@@ -30,7 +31,8 @@
 		"execa": "^9.5.2",
 		"orval-effect": "7.4.1-patch1",
 		"p-limit": "^6.2.0",
-		"picocolors": "^1.1.1"
+		"picocolors": "^1.1.1",
+		"vite": "^6.0.11"
 	},
 	"resolutions": {
 		"whatwg-url": ">=14"
