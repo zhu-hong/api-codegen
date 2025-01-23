@@ -22,7 +22,7 @@ const IMPORT_HEAD = `import { _http } from './_http.ts'`
 const workspace = process.cwd()
 
 async function main() {
-	p.intro(`V_${pc.bgYellowBright(pc.green('1.1.0'))}`)
+	p.intro(`V_${pc.bgYellowBright(pc.green('1.1.2'))}`)
 
 	const spin = p.spinner()
 
@@ -227,4 +227,7 @@ ${implementations.map((implementation) => implementation).join('\n')}`
 	p.outro('通过通过通过')
 }
 
-main().catch((error) => console.error('❌', error))
+main().catch((error) => {
+	console.error('❌', error)
+	process.exit(1)
+})
