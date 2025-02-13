@@ -13,16 +13,16 @@ import {
 import {
 	_effect_generateContextSpecs,
 	_effect_getApiGenerate,
-	getAllSchemas,
+	_effect_getAllSchemas,
 } from 'orval-effect'
 import pLimit from 'p-limit'
 import { execa } from 'execa'
 
-const IMPORT_HEAD = `import { _http } from './_http.ts'`
+const IMPORT_HEAD = `import { _http } from './_http'`
 const workspace = process.cwd()
 
 async function main() {
-	p.intro(`V_${pc.bgYellowBright(pc.green('1.1.2'))}`)
+	p.intro(`V_${pc.bgYellowBright(pc.green('1.1.3'))}`)
 
 	const spin = p.spinner()
 
@@ -74,7 +74,7 @@ async function main() {
 
 		const parsedSchemas = spec.openapi
 			? (spec.components?.schemas as SchemasObject)
-			: getAllSchemas(spec, specKey)
+			: _effect_getAllSchemas(spec, specKey)
 
 		const schemasDefinition = generateSchemasDefinition(
 			parsedSchemas,
