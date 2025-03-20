@@ -29,10 +29,8 @@ const IMPORT_HEAD = `import { _http } from '@/api/_http'`
 const workspace = process.cwd()
 
 async function readConfig(): Promise<Config> {
-	let configPath = process.argv.slice(2)[0] ?? 'swagger-api.json'
-
 	const configFileRaw = await readFile(
-		path.resolve(workspace, 'src/api', configPath),
+		path.resolve(workspace, 'src/api', 'openapi_api.json'),
 		'utf8',
 	)
 	return JSON.parse(configFileRaw) as Config
@@ -235,6 +233,6 @@ async function main() {
 }
 
 main().catch((error) => {
-	console.error('❌', error)
+	console.error('生成失败❌', error)
 	process.exit(1)
 })

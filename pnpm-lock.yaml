@@ -48,9 +48,6 @@ importers:
       axios:
         specifier: ^1.8.4
         version: 1.8.4
-      biome:
-        specifier: link:@biomejs/cli-darwin-x64/biome
-        version: link:@biomejs/cli-darwin-x64/biome
       openapi3-ts:
         specifier: ^4.4.0
         version: 4.4.0
