@@ -1,4 +1,5 @@
-import { writeFile } from 'node:fs/promises'
+import { writeFile, access, mkdir, readFile } from 'node:fs/promises'
+import path from 'node:path'
 import * as p from '@clack/prompts'
 import pc from 'picocolors'
 import type { SchemasObject } from 'openapi3-ts/oas30'
@@ -6,7 +7,6 @@ import {
 	generateSchemasDefinition,
 	generateComponentDefinition,
 	generateParameterDefinition,
-	upath,
 	kebab,
 	RefComponentSuffix,
 } from '@orval/core'
@@ -18,46 +18,46 @@ import {
 import pLimit from 'p-limit'
 import { execa } from 'execa'
 
-const IMPORT_HEAD = `import { _http } from './_http'`
+type Config = {
+	api_addresses: {
+		definition: string
+		address: string
+	}[]
+}
+
+const IMPORT_HEAD = `import { _http } from '@/api/_http'`
 const workspace = process.cwd()
 
-async function main() {
-	p.intro(`V_${pc.bgYellowBright(pc.green('1.1.3'))}`)
+async function readConfig(): Promise<Config> {
+	let configPath = process.argv.slice(2)[0] ?? 'swagger-api.json'
 
-	const spin = p.spinner()
+	const configFileRaw = await readFile(
+		path.resolve(workspace, 'src/api', configPath),
+		'utf8',
+	)
+	return JSON.parse(configFileRaw) as Config
+}
 
-	// 命令行带参数就跳过手输
-	let schemaAddress = process.argv.slice(2)[0]
-	if (!schemaAddress?.trim()) {
-		const schemaAddressInput = await p.text({
-			message: 'schema',
-			placeholder: 'openapi.schema.json',
-			validate: (value) => {
-				if (!value.trim()) return '没有没有没有'
-			},
-		})
-
-		if (p.isCancel(schemaAddressInput)) {
-			process.exit(0)
-		}
-
-		schemaAddress = schemaAddressInput
-	}
-
-	spin.start('gen context')
+async function generateAPIFile({
+	address,
+	definition,
+}: {
+	definition: string
+	address: string
+}) {
 	const contextSpecs = await _effect_generateContextSpecs({
-		input: schemaAddress,
+		input: address,
 		output: {
-			target: upath.resolve(workspace, 'src/api/'),
+			target: path.resolve(workspace, 'src/api/'),
 			mode: 'tags',
 			override: {
 				mutator: {
-					path: upath.resolve(workspace, 'src/api/_http.ts'),
+					path: path.resolve(workspace, 'src/api/_http.ts'),
 					name: '_http',
 				},
 			},
 		},
-	}).finally(() => spin.stop('gen context'))
+	})
 
 	const [specKey, spec] = Object.entries(contextSpecs.specs)[0]
 
@@ -69,56 +69,57 @@ async function main() {
 		workspace: contextSpecs.workspace,
 	}
 
-	try {
-		spin.start('gen common schema')
+	const parsedSchemas = spec.openapi
+		? (spec.components?.schemas as SchemasObject)
+		: _effect_getAllSchemas(spec, specKey)
 
-		const parsedSchemas = spec.openapi
-			? (spec.components?.schemas as SchemasObject)
-			: _effect_getAllSchemas(spec, specKey)
+	const schemasDefinition = generateSchemasDefinition(
+		parsedSchemas,
+		context,
+		RefComponentSuffix.schemas,
+	)
+	const responseDefinition = generateComponentDefinition(
+		spec.components?.responses,
+		context,
+		RefComponentSuffix.responses,
+	)
+	const bodyDefinition = generateComponentDefinition(
+		spec.components?.requestBodies,
+		context,
+		RefComponentSuffix.requestBodies,
+	)
+	const parameters = generateParameterDefinition(
+		spec.components?.parameters,
+		context,
+		RefComponentSuffix.parameters,
+	)
 
-		const schemasDefinition = generateSchemasDefinition(
-			parsedSchemas,
-			context,
-			RefComponentSuffix.schemas,
-		)
-		const responseDefinition = generateComponentDefinition(
-			spec.components?.responses,
-			context,
-			RefComponentSuffix.responses,
-		)
-		const bodyDefinition = generateComponentDefinition(
-			spec.components?.requestBodies,
-			context,
-			RefComponentSuffix.requestBodies,
-		)
-		const parameters = generateParameterDefinition(
-			spec.components?.parameters,
-			context,
-			RefComponentSuffix.parameters,
-		)
-		// 所有的通用模型（#/components/schemas）不分组写入一个文件
-		await writeFile(
-			upath.resolve(workspace, 'src/api/_schemas.gen.ts'),
-			[
-				...schemasDefinition,
-				...responseDefinition,
-				...bodyDefinition,
-				...parameters,
-			]
-				.map((s) => s.model)
-				.join('\n'),
-		)
-	} finally {
-		spin.stop('gen common schema')
-	}
+	const outputDir = path.resolve(workspace, 'src/api', definition)
 
-	spin.start('gen api schema')
+	// 建好文件夹
+	await access(outputDir).catch(async () => {
+		await mkdir(outputDir)
+	})
+
+	// 所有的通用模型（#/components/schemas）不分组写入一个文件
+	await writeFile(
+		path.resolve(outputDir, '_schemas.gen.ts'),
+		[
+			...schemasDefinition,
+			...responseDefinition,
+			...bodyDefinition,
+			...parameters,
+		]
+			.map((s) => s.model)
+			.join('\n'),
+	)
+
 	const { operations: apiOperations, schemas: apiSchemas } =
 		await _effect_getApiGenerate({
 			context,
 			input: contextSpecs.input,
 			output: contextSpecs.output,
-		}).finally(() => spin.stop('gen api schema'))
+		})
 
 	const apiOperationValues = Object.values(apiOperations)
 
@@ -177,7 +178,7 @@ async function main() {
 			}${[...new Set(schemaImports.map(({ name }) => name))].map((name) => apiSchemas.find((s) => s.name === name)?.model).join('\n')}`
 			if (schemaRaw.trim().length > 0) {
 				await writeFile(
-					upath.resolve(workspace, `src/api/${kebab(tag)}.schema.ts`),
+					path.resolve(outputDir, `${kebab(tag)}.schema.ts`),
 					schemaRaw,
 				)
 			}
@@ -198,31 +199,37 @@ async function main() {
 ${implementations.map((implementation) => implementation).join('\n')}`
 			if (implementationRaw.trim().length > 0) {
 				await writeFile(
-					upath.resolve(workspace, `src/api/${kebab(tag)}.ts`),
+					path.resolve(outputDir, `${kebab(tag)}.ts`),
 					implementationRaw,
 				)
 			}
 		}),
 	)
 
-	spin.start('gen api file')
-	await Promise.all(apiFileGenerates).finally(() => spin.stop('gen api file'))
+	await Promise.all(apiFileGenerates)
 
 	try {
-		spin.start('format')
 		await execa('pnpm', [
 			'biome',
 			'format',
 			'--write',
-			upath.resolve(workspace, 'src/api/'),
+			outputDir,
 			'--quote-style=single',
 			'--semicolons=as-needed',
 		])
-		spin.stop('format')
-	} catch {
-		// 即使错误也不耽误
-		spin.stop('❌ format')
-	}
+	} catch (_) {}
+}
+
+async function main() {
+	p.intro(`V_${pc.bgYellowBright(pc.green('2.0.0'))}`)
+
+	const config = await readConfig()
+	const limit = pLimit(3)
+	const generates = config.api_addresses.map((api) => {
+		return limit(() => generateAPIFile(api))
+	})
+
+	await Promise.all(generates)
 
 	p.outro('通过通过通过')
 }
