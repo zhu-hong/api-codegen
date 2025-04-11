@@ -22,6 +22,7 @@ type Config = {
 	api_addresses: {
 		definition: string
 		address: string
+		generate?: boolean
 	}[]
 }
 
@@ -223,9 +224,9 @@ async function main() {
 
 	const config = await readConfig()
 	const limit = pLimit(3)
-	const generates = config.api_addresses.map((api) => {
-		return limit(() => generateAPIFile(api))
-	})
+	const generates = config.api_addresses
+		.filter(({ generate }) => generate !== false)
+		.map((api) => limit(() => generateAPIFile(api)))
 
 	await Promise.all(generates)
 
