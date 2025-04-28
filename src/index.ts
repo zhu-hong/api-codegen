@@ -220,7 +220,7 @@ ${implementations.map((implementation) => implementation).join('\n')}`
 }
 
 async function main() {
-	p.intro(`V_${pc.bgYellowBright(pc.green('2.0.0'))}`)
+	p.intro(`V_${pc.bgYellowBright(pc.green('2.0.2'))}`)
 
 	const config = await readConfig()
 	const limit = pLimit(3)
