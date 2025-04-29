@@ -6,9 +6,7 @@
 	"bin": {
 		"d2m-apigen": "dist/index.js"
 	},
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"scripts": {
 		"dev": "vite",
 		"build": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript",
@@ -40,9 +38,6 @@
 		"whatwg-url": ">=14"
 	},
 	"pnpm": {
-		"onlyBuiltDependencies": [
-			"@biomejs/biome",
-			"esbuild"
-		]
+		"onlyBuiltDependencies": ["@biomejs/biome", "esbuild"]
 	}
 }

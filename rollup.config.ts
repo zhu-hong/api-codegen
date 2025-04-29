@@ -10,7 +10,6 @@ export default defineConfig({
 		'picocolors',
 		'@orval/core',
 		'execa',
-		'orval',
 		'orval-effect',
 		'p-limit',
 	],
