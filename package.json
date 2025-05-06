@@ -8,14 +8,15 @@
 	},
 	"files": ["dist"],
 	"scripts": {
-		"build": "pnpm format && bumpp && rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript",
+		"build": "rollup -c --configPlugin typescript --configImportAttributesKey with",
 		"format": "biome format --write . --use-editorconfig=true",
-		"prepublishOnly": "pnpm build"
+		"prepublishOnly": "pnpm format && bumpp && pnpm build"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
 		"@rollup/plugin-commonjs": "^28.0.3",
 		"@rollup/plugin-node-resolve": "^16.0.1",
+		"@rollup/plugin-replace": "^6.0.2",
 		"@rollup/plugin-typescript": "^12.1.2",
 		"@types/node": "^22.15.12",
 		"axios": "^1.9.0",
