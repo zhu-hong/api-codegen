@@ -8,7 +8,6 @@
 	},
 	"files": ["dist"],
 	"scripts": {
-		"dev": "vite",
 		"build": "pnpm format && bumpp && rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript",
 		"format": "biome format --write . --use-editorconfig=true",
 		"prepublishOnly": "pnpm build"
