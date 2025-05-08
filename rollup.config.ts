@@ -3,7 +3,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import typescript from '@rollup/plugin-typescript'
 import replace from '@rollup/plugin-replace'
-import packageJSON from './package.json' with { type: 'json' }
+import pkg from './package.json' with { type: 'json' }
 
 export default defineConfig({
 	input: './src/index.ts',
@@ -21,7 +21,7 @@ export default defineConfig({
 		typescript(),
 		replace({
 			preventAssignment: true,
-			__buildVersion: `'${packageJSON.version}'`,
+			__buildVersion: `'${pkg.version}'`,
 		}),
 	],
 	output: {
