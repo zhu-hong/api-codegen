@@ -6,9 +6,7 @@
 	"bin": {
 		"d2m-apigen": "dist/index.js"
 	},
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"scripts": {
 		"build": "rollup -c --configPlugin typescript --configImportAttributesKey with",
 		"format": "biome format --write . --use-editorconfig=true",
@@ -20,18 +18,18 @@
 		"@rollup/plugin-node-resolve": "^16.0.1",
 		"@rollup/plugin-replace": "^6.0.2",
 		"@rollup/plugin-typescript": "^12.1.2",
-		"@types/node": "^22.15.16",
+		"@types/node": "^22.15.21",
 		"axios": "^1.9.0",
-		"bumpp": "^10.1.0",
+		"bumpp": "^10.1.1",
 		"openapi3-ts": "^4.4.0",
-		"rollup": "^4.40.2",
+		"rollup": "^4.41.0",
 		"tslib": "^2.8.1",
 		"typescript": "^5.8.3"
 	},
 	"dependencies": {
 		"@clack/prompts": "^0.10.1",
 		"@orval/core": "^7.9.0",
-		"execa": "^9.5.2",
+		"execa": "^9.5.3",
 		"orval-effect": "7.9.0",
 		"p-limit": "^6.2.0",
 		"picocolors": "^1.1.1"
@@ -43,9 +41,6 @@
 		"whatwg-url": "14.2.0"
 	},
 	"pnpm": {
-		"onlyBuiltDependencies": [
-			"@biomejs/biome",
-			"esbuild"
-		]
+		"onlyBuiltDependencies": ["@biomejs/biome", "esbuild"]
 	}
 }
