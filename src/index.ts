@@ -222,7 +222,9 @@ ${implementations.map((implementation) => implementation).join('\n')}`
 }
 
 async function main() {
-	p.intro(`V_${pc.bgYellowBright(pc.green(process.argv.slice(2)[0] === '-d' ? 'now' : __buildVersion))}`)
+	p.intro(
+		`V_${pc.bgYellowBright(pc.green(process.argv.slice(2)[0] === '-d' ? 'now' : __buildVersion))}`,
+	)
 
 	const config = await readConfig()
 	const limit = pLimit(3)
