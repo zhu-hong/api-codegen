@@ -1,7 +1,7 @@
 {
 	"name": "d2m-apigen",
 	"private": false,
-	"version": "2.0.10",
+	"version": "2.0.11",
 	"type": "module",
 	"bin": {
 		"d2m-apigen": "dist/index.js"
