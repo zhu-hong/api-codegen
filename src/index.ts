@@ -1,24 +1,24 @@
 #!/usr/bin/env node
 
-import { writeFile, access, mkdir, readFile } from 'node:fs/promises'
+import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import * as p from '@clack/prompts'
-import pc from 'picocolors'
-import type { SchemasObject } from 'openapi3-ts/oas30'
 import {
-	generateSchemasDefinition,
 	generateComponentDefinition,
 	generateParameterDefinition,
+	generateSchemasDefinition,
 	kebab,
 	RefComponentSuffix,
 } from '@orval/core'
+import { execa } from 'execa'
+import type { SchemasObject } from 'openapi3-ts/oas30'
 import {
 	_effect_generateContextSpecs,
-	_effect_getApiGenerate,
 	_effect_getAllSchemas,
+	_effect_getApiGenerate,
 } from 'orval-effect'
 import pLimit from 'p-limit'
-import { execa } from 'execa'
+import pc from 'picocolors'
 
 type Config = {
 	api_addresses: {
@@ -28,10 +28,14 @@ type Config = {
 	}[]
 }
 
-const IMPORT_HEAD = `import { _http } from '@/api/_http'`
+let ISDEV = process.argv.includes('-d')
+
+const IMPORT_MUTATOR = `import { _http } from '@/api/_http'`
 const workspace = process.cwd()
 
-async function readConfig(): Promise<Config> {
+const spin = p.spinner()
+
+async function loadConfig(): Promise<Config> {
 	const configFileRaw = await readFile(
 		path.resolve(workspace, 'src/api', 'openapi_api.json'),
 		'utf8',
@@ -185,17 +189,18 @@ async function generateAPIFile({
 			}
 
 			// [tag].ts
-			const implementationRaw = `${
-				commonSchemaImports.length === 0
-					? ''
-					: `import type {${[...new Set(commonSchemaImports.map(({ name }) => name))].join(',')},} from './_schemas.gen'
+			const implementationRaw = `${IMPORT_MUTATOR}
+${
+	commonSchemaImports.length === 0
+		? ''
+		: `import type {${[...new Set(commonSchemaImports.map(({ name }) => name))].join(',')},} from './_schemas.gen'
 `
-			}${
-				schemaImports.length === 0
-					? ''
-					: `import type {${[...new Set(schemaImports.map(({ name }) => name))].join(',')},} from './${kebab(tag)}.schema'
+}${
+	schemaImports.length === 0
+		? ''
+		: `import type {${[...new Set(schemaImports.map(({ name }) => name))].join(',')},} from './${kebab(tag)}.schema'
 `
-			}${IMPORT_HEAD}
+}
 
 ${implementations.map((implementation) => implementation).join('\n')}`
 			if (implementationRaw.trim().length > 0) {
@@ -215,29 +220,42 @@ ${implementations.map((implementation) => implementation).join('\n')}`
 			'format',
 			'--write',
 			outputDir,
-			'--quote-style=single',
+			'--javascript-formatter-quote-style=single',
 			'--semicolons=as-needed',
 		])
-	} catch (_) {}
+	} catch (error) {
+		if (ISDEV) {
+			console.error(error)
+		}
+	}
 }
 
 async function main() {
-	p.intro(
-		`V_${pc.bgYellowBright(pc.green(process.argv.slice(2)[0] === '-d' ? 'now' : __buildVersion))}`,
-	)
+	p.intro(`V_${pc.bgYellowBright(pc.green(ISDEV ? 'now' : __buildVersion))}`)
 
-	const config = await readConfig()
-	const limit = pLimit(3)
+	const config = await loadConfig()
+	const limit = pLimit(1)
 	const generates = config.api_addresses
 		.filter(({ generate }) => generate !== false)
-		.map((api) => limit(() => generateAPIFile(api)))
+		.map((api) =>
+			limit(async () => {
+				const definition = api.definition || 'root'
+
+				spin.start(`正在生成：${definition}`)
+				await generateAPIFile(api).catch((error) => {
+					spin.stop(`⁉️ ${definition}`)
+					throw error
+				})
+				spin.stop(`✅ ${definition}`)
+			}),
+		)
 
 	await Promise.all(generates)
 
-	p.outro('通过通过通过')
+	p.outro('完成了')
 }
 
 main().catch((error) => {
-	console.error('生成失败❌', error)
+	console.error('❌ 发生错误', error)
 	process.exit(1)
 })

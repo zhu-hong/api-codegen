@@ -1,19 +1,19 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
-	"exclude": ["node_modules", "dist", "src/api/*"],
+	"include": ["src/index.ts", "env.d.ts"],
 	"compilerOptions": {
 		"target": "ESNext",
-		"module": "esnext",
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"inlineSources": false,
-		"isolatedModules": false,
-		"moduleResolution": "node",
-		"noUnusedLocals": false,
-		"noUnusedParameters": false,
-		"preserveWatchOutput": true,
+		"useDefineForClassFields": true,
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
+		"module": "nodenext",
 		"skipLibCheck": true,
+		"moduleResolution": "nodenext",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noEmit": true,
 		"strict": true,
-		"resolveJsonModule": true
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true
 	}
 }
