@@ -252,7 +252,7 @@ async function main() {
 
 	await Promise.all(generates)
 
-	p.outro('完成了')
+	p.outro('通过通过通过 👏👏👏')
 }
 
 main().catch((error) => {
