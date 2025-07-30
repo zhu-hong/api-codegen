@@ -4,6 +4,7 @@ import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import * as p from '@clack/prompts'
 import {
+	ContextSpecs,
 	generateComponentDefinition,
 	generateParameterDefinition,
 	generateSchemasDefinition,
@@ -43,14 +44,9 @@ async function loadConfig(): Promise<Config> {
 	return JSON.parse(configFileRaw) as Config
 }
 
-async function generateAPIFile({
-	address,
-	definition,
-}: {
-	definition: string
-	address: string
-}) {
-	const contextSpecs = await _effect_generateContextSpecs({
+async function generateAPIFile(api: Config['api_addresses'][number]) {
+	const { address, definition } = api
+	const context = await _effect_generateContextSpecs({
 		input: address,
 		output: {
 			target: path.resolve(workspace, 'src/api/'),
@@ -64,14 +60,14 @@ async function generateAPIFile({
 		},
 	})
 
-	const [specKey, spec] = Object.entries(contextSpecs.specs)[0]
+	const [specKey, spec] = Object.entries(context.specs)[0]
 
-	const context = {
-		output: contextSpecs.output,
+	const contextArgs: ContextSpecs = {
+		output: context.output,
 		specKey,
-		specs: contextSpecs.specs,
-		target: contextSpecs.target,
-		workspace: contextSpecs.workspace,
+		specs: context.specs,
+		target: context.target,
+		workspace: context.workspace,
 	}
 
 	const parsedSchemas = spec.openapi
@@ -80,137 +76,155 @@ async function generateAPIFile({
 
 	const schemasDefinition = generateSchemasDefinition(
 		parsedSchemas,
-		context,
+		contextArgs,
 		RefComponentSuffix.schemas,
 	)
 	const responseDefinition = generateComponentDefinition(
 		spec.components?.responses,
-		context,
+		contextArgs,
 		RefComponentSuffix.responses,
 	)
 	const bodyDefinition = generateComponentDefinition(
 		spec.components?.requestBodies,
-		context,
+		contextArgs,
 		RefComponentSuffix.requestBodies,
 	)
 	const parameters = generateParameterDefinition(
 		spec.components?.parameters,
-		context,
+		contextArgs,
 		RefComponentSuffix.parameters,
 	)
 
 	const outputDir = path.resolve(workspace, 'src/api', definition)
 
 	// 建好文件夹
-	await access(outputDir).catch(async () => {
+	await access(outputDir).catch(async (error) => {
+		if (ISDEV) {
+			console.error(error)
+		}
 		await mkdir(outputDir)
 	})
 
-	// 所有的通用模型（#/components/schemas）不分组写入一个文件
-	await writeFile(
-		path.resolve(outputDir, '_schemas.gen.ts'),
-		[
-			...schemasDefinition,
-			...responseDefinition,
-			...bodyDefinition,
-			...parameters,
-		]
-			.map((s) => s.model)
-			.join('\n'),
-	)
-
 	const { operations: apiOperations, schemas: apiSchemas } =
 		await _effect_getApiGenerate({
-			context,
-			input: contextSpecs.input,
-			output: contextSpecs.output,
+			context: contextArgs,
+			input: context.input,
+			output: context.output,
 		})
+
+	const apiFileGenerates: Promise<void>[] = []
+	const limit = pLimit(8)
+
+	// 所有的通用模型（#/components/schemas）不分组写入一个文件
+	const writeCommonModel = async () => {
+		await writeFile(
+			path.resolve(outputDir, '_schemas.gen.ts'),
+			[
+				...schemasDefinition,
+				...responseDefinition,
+				...bodyDefinition,
+				...parameters,
+			]
+				.map((s) => s.model)
+				.join('\n'),
+		)
+	}
+
+	apiFileGenerates.push(limit(async () => await writeCommonModel()))
 
 	const apiOperationValues = Object.values(apiOperations)
 
 	const tags = [...new Set(apiOperationValues.map(({ tags }) => tags).flat())]
 
-	const limit = pLimit(3)
-	const apiFileGenerates = tags.map((tag) =>
-		limit(async () => {
-			const operations = apiOperationValues.filter(({ tags }) =>
-				tags.includes(tag),
-			)
-			/**
-			 * 统计出tag用哪些接口函数，以及用到了哪些schema，schema有引用了哪些modelSchema
-			 */
-			const implementations = operations.map(
-				({ implementation }) => implementation,
-			)
+	tags.forEach((tag) => {
+		apiFileGenerates.push(
+			limit(async () => {
+				const operations = apiOperationValues.filter(({ tags }) =>
+					tags.includes(tag),
+				)
+				/**
+				 * 统计出tag用哪些接口函数，以及用到了哪些schema，schema有引用了哪些modelSchema
+				 */
+				const implementations = operations.map(
+					({ implementation }) => implementation,
+				)
 
-			type Imports = (typeof operations)[number]['imports']
+				type Imports = (typeof operations)[number]['imports']
 
-			// 这是接口函数文件用到的通用schema
-			const commonSchemaImports: Imports = []
-			// 这是接口函数文件用到的特用schema
-			const schemaImports: Imports = []
-			// 这是接口函数特用schema用到的通用schema
-			const schemaCommonImports: Imports = []
+				// 这是接口函数文件用到的通用schema
+				const commonSchemaImports: Imports = []
+				// 这是接口函数文件用到的特用schema
+				const schemaImports: Imports = []
+				// 这是接口函数特用schema用到的通用schema
+				const schemaCommonImports: Imports = []
 
-			operations
-				.map(({ imports }) => imports)
-				.flat()
-				.forEach((meta) => {
-					// 这是接口函数文件用到的通用schema
-					if (meta.schemaName) {
-						commonSchemaImports.push(meta)
-						return
-					}
+				operations
+					.map(({ imports }) => imports)
+					.flat()
+					.forEach((meta) => {
+						// 这是接口函数文件用到的通用schema
+						if (meta.schemaName) {
+							commonSchemaImports.push(meta)
+							return
+						}
 
-					// 这是接口函数文件用到的特用schema
-					schemaImports.push(meta)
+						// 这是接口函数文件用到的特用schema
+						schemaImports.push(meta)
 
-					const target = apiSchemas.find((schema) => schema.name === meta.name)
-					if (target !== undefined) {
-						// 这是接口函数特用schema用到的通用schema
-						schemaCommonImports.push(
-							...target.imports.filter(({ schemaName }) => schemaName),
+						const target = apiSchemas.find(
+							(schema) => schema.name === meta.name,
 						)
-					}
-				})
+						if (target !== undefined) {
+							// 这是接口函数特用schema用到的通用schema
+							schemaCommonImports.push(
+								...target.imports.filter(({ schemaName }) => schemaName),
+							)
+						}
+					})
 
-			// [tag].schema.ts
-			const schemaRaw = `${
-				schemaCommonImports.length === 0
+				await Promise.all([
+					(async () => {
+						// [tag].schema.ts
+						const schemaRaw = `${
+							schemaCommonImports.length === 0
+								? ''
+								: `import type {${[...new Set(schemaCommonImports.map(({ name }) => name))].join(',')},} from './_schemas.gen'
+			`
+						}${[...new Set(schemaImports.map(({ name }) => name))].map((name) => apiSchemas.find((s) => s.name === name)?.model).join('\n')}`
+						if (schemaRaw.trim().length > 0) {
+							await writeFile(
+								path.resolve(outputDir, `${kebab(tag)}.schema.ts`),
+								schemaRaw,
+							)
+						}
+					})(),
+					(async () => {
+						// [tag].ts
+						const implementationRaw = `${IMPORT_MUTATOR}
+			${
+				commonSchemaImports.length === 0
 					? ''
-					: `import type {${[...new Set(schemaCommonImports.map(({ name }) => name))].join(',')},} from './_schemas.gen'
-`
-			}${[...new Set(schemaImports.map(({ name }) => name))].map((name) => apiSchemas.find((s) => s.name === name)?.model).join('\n')}`
-			if (schemaRaw.trim().length > 0) {
-				await writeFile(
-					path.resolve(outputDir, `${kebab(tag)}.schema.ts`),
-					schemaRaw,
-				)
+					: `import type {${[...new Set(commonSchemaImports.map(({ name }) => name))].join(',')},} from './_schemas.gen'
+			`
+			}${
+				schemaImports.length === 0
+					? ''
+					: `import type {${[...new Set(schemaImports.map(({ name }) => name))].join(',')},} from './${kebab(tag)}.schema'
+			`
 			}
-
-			// [tag].ts
-			const implementationRaw = `${IMPORT_MUTATOR}
-${
-	commonSchemaImports.length === 0
-		? ''
-		: `import type {${[...new Set(commonSchemaImports.map(({ name }) => name))].join(',')},} from './_schemas.gen'
-`
-}${
-	schemaImports.length === 0
-		? ''
-		: `import type {${[...new Set(schemaImports.map(({ name }) => name))].join(',')},} from './${kebab(tag)}.schema'
-`
-}
-
-${implementations.map((implementation) => implementation).join('\n')}`
-			if (implementationRaw.trim().length > 0) {
-				await writeFile(
-					path.resolve(outputDir, `${kebab(tag)}.ts`),
-					implementationRaw,
-				)
-			}
-		}),
-	)
+			
+			${implementations.map((implementation) => implementation).join('\n')}`
+						if (implementationRaw.trim().length > 0) {
+							await writeFile(
+								path.resolve(outputDir, `${kebab(tag)}.ts`),
+								implementationRaw,
+							)
+						}
+					})(),
+				])
+			}),
+		)
+	})
 
 	await Promise.all(apiFileGenerates)
 
@@ -252,7 +266,7 @@ async function main() {
 
 	await Promise.all(generates)
 
-	p.outro('通过通过通过 👏👏👏')
+	p.outro('mymymytg 👏👏👏')
 }
 
 main().catch((error) => {
