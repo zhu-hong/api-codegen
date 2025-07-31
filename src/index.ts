@@ -231,11 +231,13 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 	try {
 		await execa('pnpm', [
 			'biome',
-			'format',
+			'check',
 			'--write',
 			outputDir,
+			'--formatter-enabled=true',
 			'--javascript-formatter-quote-style=single',
 			'--semicolons=as-needed',
+			'--linter-enabled=false',
 		])
 	} catch (error) {
 		if (ISDEV) {
