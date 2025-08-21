@@ -4,7 +4,7 @@ import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import * as p from '@clack/prompts'
 import {
-	ContextSpecs,
+	type ContextSpecs,
 	generateComponentDefinition,
 	generateParameterDefinition,
 	generateSchemasDefinition,
@@ -29,7 +29,7 @@ type Config = {
 	}[]
 }
 
-let ISDEV = process.argv.includes('-d')
+const ISDEV = process.argv.includes('-d')
 
 const IMPORT_MUTATOR = `import { _http } from '@/api/_http'`
 const workspace = process.cwd()
@@ -134,7 +134,7 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 
 	const apiOperationValues = Object.values(apiOperations)
 
-	const tags = [...new Set(apiOperationValues.map(({ tags }) => tags).flat())]
+	const tags = [...new Set(apiOperationValues.flatMap(({ tags }) => tags))]
 
 	tags.forEach((tag) => {
 		apiFileGenerates.push(
@@ -159,8 +159,7 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 				const schemaCommonImports: Imports = []
 
 				operations
-					.map(({ imports }) => imports)
-					.flat()
+					.flatMap(({ imports }) => imports)
 					.forEach((meta) => {
 						// 这是接口函数文件用到的通用schema
 						if (meta.schemaName) {
