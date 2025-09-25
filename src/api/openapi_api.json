@@ -1,0 +1,18 @@
+{
+	"api_addresses": [
+		{
+			"definition": "common",
+			"address": "http://192.168.3.185:8080/swagger/Default/swagger.json"
+		},
+		{
+			"definition": "production",
+			"address": "http://192.168.3.185:8080/swagger/Production/swagger.json",
+			"generate": false
+		},
+		{
+			"definition": "quanlity",
+			"address": "http://192.168.3.185:8080/swagger/Quanlity/swagger.json",
+			"generate": false
+		}
+	]
+}
