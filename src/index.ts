@@ -1,18 +1,19 @@
 #!/usr/bin/env node
 
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
-import path from 'node:path'
+import path, { join } from 'node:path'
 import * as p from '@clack/prompts'
 import {
 	type ContextSpecs,
 	generateComponentDefinition,
 	generateParameterDefinition,
 	generateSchemasDefinition,
+	isUrl,
 	kebab,
 	RefComponentSuffix,
 } from '@orval/core'
 import { execa } from 'execa'
-import type { SchemasObject } from 'openapi3-ts/oas30'
+import type { OpenAPIObject, SchemasObject } from 'openapi3-ts/oas30'
 import {
 	_effect_generateContextSpecs,
 	_effect_getAllSchemas,
@@ -20,6 +21,7 @@ import {
 } from 'orval-effect'
 import pLimit from 'p-limit'
 import pc from 'picocolors'
+import { rimraf } from 'rimraf'
 
 type Config = {
 	api_addresses: {
@@ -46,8 +48,16 @@ async function loadConfig(): Promise<Config> {
 
 async function generateAPIFile(api: Config['api_addresses'][number]) {
 	const { address, definition } = api
+
+	let APIObject: OpenAPIObject | null = null
+	if (isUrl(address)) {
+		APIObject = (await fetch(address)).json() as unknown as OpenAPIObject
+	}
+
 	const context = await _effect_generateContextSpecs({
-		input: address,
+		input: {
+			target: APIObject ?? address,
+		},
 		output: {
 			target: path.resolve(workspace, 'src/api/'),
 			mode: 'tags',
@@ -63,11 +73,11 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 	const [specKey, spec] = Object.entries(context.specs)[0]
 
 	const contextArgs: ContextSpecs = {
-		output: context.output,
 		specKey,
-		specs: context.specs,
 		target: context.target,
 		workspace: context.workspace,
+		specs: context.specs,
+		output: context.output,
 	}
 
 	const parsedSchemas = spec.openapi
@@ -78,6 +88,7 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 		parsedSchemas,
 		contextArgs,
 		RefComponentSuffix.schemas,
+		context.input.filters,
 	)
 	const responseDefinition = generateComponentDefinition(
 		spec.components?.responses,
@@ -100,10 +111,20 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 	// 建好文件夹
 	await access(outputDir).catch(async (error) => {
 		if (ISDEV) {
-			console.error(error)
+			console.error(`访问文件夹${outputDir}错误`, error)
 		}
 		await mkdir(outputDir)
 	})
+
+	try {
+		await rimraf(join(outputDir, '*'), {
+			glob: true,
+		})
+	} catch (error) {
+		if (ISDEV) {
+			console.error('rimraf错误', error)
+		}
+	}
 
 	const { operations: apiOperations, schemas: apiSchemas } =
 		await _effect_getApiGenerate({
@@ -240,7 +261,7 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 		])
 	} catch (error) {
 		if (ISDEV) {
-			console.error(error)
+			console.error('biome格式化错误', error)
 		}
 	}
 }

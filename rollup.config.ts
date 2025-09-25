@@ -14,6 +14,7 @@ export default defineConfig({
 		'execa',
 		'orval-effect',
 		'p-limit',
+		'rimraf',
 	],
 	plugins: [
 		commonjs(),
