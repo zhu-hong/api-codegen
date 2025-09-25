@@ -267,7 +267,7 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 }
 
 async function main() {
-	p.intro(`V_${pc.bgYellowBright(pc.green(ISDEV ? 'now' : __buildVersion))}`)
+	p.intro(`V_${pc.bgYellowBright(pc.green(ISDEV ? new Date().toLocaleString() : __buildVersion))}`)
 
 	const config = await loadConfig()
 	const limit = pLimit(1)
