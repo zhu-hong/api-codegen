@@ -12,6 +12,7 @@ import {
 	kebab,
 	RefComponentSuffix,
 } from '@orval/core'
+import { deleteAsync } from 'del'
 import { execa } from 'execa'
 import type { OpenAPIObject, SchemasObject } from 'openapi3-ts/oas30'
 import {
@@ -21,7 +22,6 @@ import {
 } from 'orval-effect'
 import pLimit from 'p-limit'
 import pc from 'picocolors'
-import { rimraf } from 'rimraf'
 
 type Config = {
 	api_addresses: {
@@ -111,18 +111,29 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 	// 建好文件夹
 	await access(outputDir).catch(async (error) => {
 		if (ISDEV) {
-			console.error(`访问文件夹${outputDir}错误`, error)
+			console.error(
+				`\n${pc.bgYellowBright(pc.green('只是警告'))}`,
+				`访问文件夹${outputDir}错误`,
+				error,
+			)
 		}
 		await mkdir(outputDir)
 	})
 
 	try {
-		await rimraf(join(outputDir, '*'), {
-			glob: true,
-		})
+		await deleteAsync([
+			join(outputDir, '*'),
+			'!' + join(outputDir, '**/'),
+			'!' + join(outputDir, '_http.ts'),
+			'!' + join(outputDir, 'openapi_api.json'),
+		])
 	} catch (error) {
 		if (ISDEV) {
-			console.error('rimraf错误', error)
+			console.error(
+				`\n${pc.bgYellowBright(pc.green('只是警告'))}`,
+				'deleteAsync错误',
+				error,
+			)
 		}
 	}
 
@@ -261,13 +272,19 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 		])
 	} catch (error) {
 		if (ISDEV) {
-			console.error('biome格式化错误', error)
+			console.error(
+				`\n${pc.bgYellowBright(pc.green('只是警告'))}`,
+				'biome格式化错误',
+				error,
+			)
 		}
 	}
 }
 
 async function main() {
-	p.intro(`V_${pc.bgYellowBright(pc.green(ISDEV ? new Date().toLocaleString() : __buildVersion))}`)
+	p.intro(
+		`V_${pc.bgYellowBright(pc.green(ISDEV ? new Date().toLocaleString() : __buildVersion))}`,
+	)
 
 	const config = await loadConfig()
 	const limit = pLimit(1)

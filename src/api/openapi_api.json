@@ -6,13 +6,11 @@
 		},
 		{
 			"definition": "production",
-			"address": "http://192.168.3.185:8080/swagger/Production/swagger.json",
-			"generate": false
+			"address": "http://192.168.3.185:8080/swagger/Production/swagger.json"
 		},
 		{
 			"definition": "quanlity",
-			"address": "http://192.168.3.185:8080/swagger/Quanlity/swagger.json",
-			"generate": false
+			"address": "http://192.168.3.185:8080/swagger/Quanlity/swagger.json"
 		}
 	]
 }
