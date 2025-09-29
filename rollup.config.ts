@@ -9,12 +9,12 @@ export default defineConfig({
 	input: './src/index.ts',
 	external: [
 		'@clack/prompts',
-		'picocolors',
 		'@orval/core',
+		'del',
 		'execa',
 		'orval-effect',
 		'p-limit',
-		'rimraf',
+		'picocolors',
 	],
 	plugins: [
 		commonjs(),

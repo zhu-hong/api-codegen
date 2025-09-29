@@ -3,18 +3,10 @@
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import path, { join } from 'node:path'
 import * as p from '@clack/prompts'
-import {
-	type ContextSpecs,
-	generateComponentDefinition,
-	generateParameterDefinition,
-	generateSchemasDefinition,
-	isUrl,
-	kebab,
-	RefComponentSuffix,
-} from '@orval/core'
+import orval, { type ContextSpecs } from '@orval/core'
 import { deleteAsync } from 'del'
 import { execa } from 'execa'
-import type { OpenAPIObject, SchemasObject } from 'openapi3-ts/oas30'
+import type { SchemasObject } from 'openapi3-ts/oas30'
 import {
 	_effect_generateContextSpecs,
 	_effect_getAllSchemas,
@@ -22,6 +14,14 @@ import {
 } from 'orval-effect'
 import pLimit from 'p-limit'
 import pc from 'picocolors'
+
+const {
+	generateComponentDefinition,
+	generateParameterDefinition,
+	generateSchemasDefinition,
+	kebab,
+	RefComponentSuffix,
+} = orval
 
 type Config = {
 	api_addresses: {
@@ -31,7 +31,9 @@ type Config = {
 	}[]
 }
 
-const ISDEV = process.argv.includes('-d')
+const args = process.argv
+
+const ISDEV = args.includes('-d')
 
 const IMPORT_MUTATOR = `import { _http } from '@/api/_http'`
 const workspace = process.cwd()
@@ -49,14 +51,9 @@ async function loadConfig(): Promise<Config> {
 async function generateAPIFile(api: Config['api_addresses'][number]) {
 	const { address, definition } = api
 
-	let APIObject: OpenAPIObject | null = null
-	if (isUrl(address)) {
-		APIObject = (await fetch(address)).json() as unknown as OpenAPIObject
-	}
-
 	const context = await _effect_generateContextSpecs({
 		input: {
-			target: APIObject ?? address,
+			target: address,
 		},
 		output: {
 			target: path.resolve(workspace, 'src/api/'),
@@ -285,8 +282,30 @@ async function main() {
 	p.intro(
 		`V_${pc.bgYellowBright(pc.green(ISDEV ? new Date().toLocaleString() : __buildVersion))}`,
 	)
+	let config: Config | null = null
 
-	const config = await loadConfig()
+	// 兼容版本1
+	const parseV1SchemaPath = () => {
+		const target = args.findIndex((arg) => arg === '-s')
+
+		if (target === -1) return
+
+		return args[target + 1]
+	}
+	const schemaPath = parseV1SchemaPath()
+	if (schemaPath) {
+		config = {
+			api_addresses: [
+				{
+					address: schemaPath,
+					definition: '',
+				},
+			],
+		}
+	} else {
+		config = await loadConfig()
+	}
+
 	const limit = pLimit(1)
 	const generates = config.api_addresses
 		.filter(({ generate }) => generate !== false)
