@@ -5,11 +5,7 @@
 			"address": "http://192.168.3.185:8080/swagger/Default/swagger.json"
 		},
 		{
-			"definition": "production",
-			"address": "http://192.168.3.185:8080/swagger/Production/swagger.json"
-		},
-		{
-			"definition": "quanlity",
+			"definition": "legacy",
 			"address": "http://192.168.3.187/swagger/docs/v1"
 		}
 	]
