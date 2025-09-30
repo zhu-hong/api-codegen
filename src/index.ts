@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
-import path, { join } from 'node:path'
+import { join, resolve } from 'node:path'
 import * as p from '@clack/prompts'
 import orval, { type ContextSpecs } from '@orval/core'
 import { deleteAsync } from 'del'
@@ -36,13 +36,12 @@ const args = process.argv
 const ISDEV = args.includes('-d')
 
 const IMPORT_MUTATOR = `import { _http } from '@/api/_http'`
-const workspace = process.cwd()
 
 const spin = p.spinner()
 
 async function loadConfig(): Promise<Config> {
 	const configFileRaw = await readFile(
-		path.resolve(workspace, 'src/api', 'openapi_api.json'),
+		resolve('src/api', 'openapi_api.json'),
 		'utf8',
 	)
 	return JSON.parse(configFileRaw) as Config
@@ -56,11 +55,11 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 			target: address,
 		},
 		output: {
-			target: path.resolve(workspace, 'src/api/'),
+			target: resolve(join('src/api', definition)),
 			mode: 'tags',
 			override: {
 				mutator: {
-					path: path.resolve(workspace, 'src/api/_http.ts'),
+					path: resolve('src/api/_http.ts'),
 					name: '_http',
 				},
 			},
@@ -103,7 +102,7 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 		RefComponentSuffix.parameters,
 	)
 
-	const outputDir = path.resolve(workspace, 'src/api', definition)
+	const outputDir = resolve('src/api', definition)
 
 	// 建好文件夹
 	await access(outputDir).catch(async (error) => {
@@ -117,12 +116,19 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 		await mkdir(outputDir)
 	})
 
+	const { operations: apiOperations, schemas: apiSchemas } =
+		await _effect_getApiGenerate({
+			context: contextArgs,
+			input: context.input,
+			output: context.output,
+		})
+
 	try {
 		await deleteAsync([
 			join(outputDir, '*'),
-			'!' + join(outputDir, '**/'),
-			'!' + join(outputDir, '_http.ts'),
-			'!' + join(outputDir, 'openapi_api.json'),
+			`!${join(outputDir, '**/')}`,
+			`!${join(outputDir, '_http.ts')}`,
+			`!${join(outputDir, 'openapi_api.json')}`,
 		])
 	} catch (error) {
 		if (ISDEV) {
@@ -134,20 +140,13 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 		}
 	}
 
-	const { operations: apiOperations, schemas: apiSchemas } =
-		await _effect_getApiGenerate({
-			context: contextArgs,
-			input: context.input,
-			output: context.output,
-		})
-
 	const apiFileGenerates: Promise<void>[] = []
 	const limit = pLimit(8)
 
 	// 所有的通用模型（#/components/schemas）不分组写入一个文件
 	const writeCommonModel = async () => {
 		await writeFile(
-			path.resolve(outputDir, '_schemas.gen.ts'),
+			resolve(outputDir, '_schemas.gen.ts'),
 			[
 				...schemasDefinition,
 				...responseDefinition,
@@ -221,7 +220,7 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 						}${[...new Set(schemaImports.map(({ name }) => name))].map((name) => apiSchemas.find((s) => s.name === name)?.model).join('\n')}`
 						if (schemaRaw.trim().length > 0) {
 							await writeFile(
-								path.resolve(outputDir, `${kebab(tag)}.schema.ts`),
+								resolve(outputDir, `${kebab(tag)}.schema.ts`),
 								schemaRaw,
 							)
 						}
@@ -244,7 +243,7 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 			${implementations.map((implementation) => implementation).join('\n')}`
 						if (implementationRaw.trim().length > 0) {
 							await writeFile(
-								path.resolve(outputDir, `${kebab(tag)}.ts`),
+								resolve(outputDir, `${kebab(tag)}.ts`),
 								implementationRaw,
 							)
 						}
@@ -284,9 +283,9 @@ async function main() {
 	)
 	let config: Config | null = null
 
-	// 兼容版本1
+	// 兼容版本1用法
 	const parseV1SchemaPath = () => {
-		const target = args.findIndex((arg) => arg === '-s')
+		const target = args.indexOf('-s')
 
 		if (target === -1) return
 

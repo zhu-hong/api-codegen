@@ -23,4 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-src/api
+!src/api/_http.ts
+!src/api/openapi_api.json
+src/api/*

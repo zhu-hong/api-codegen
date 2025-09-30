@@ -27,7 +27,7 @@ AXIOS_INSTANCE.interceptors.response.use(
 	},
 )
 
-export const _http = async <T = any>(
+export const _http = async <T>(
 	config: AxiosRequestConfig,
 	_config: AxiosRequestConfig & { tipWhenError?: boolean } = {},
 ): Promise<

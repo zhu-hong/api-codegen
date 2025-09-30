@@ -10,7 +10,7 @@
 		},
 		{
 			"definition": "quanlity",
-			"address": "http://192.168.3.185:8080/swagger/Quanlity/swagger.json"
+			"address": "http://192.168.3.187/swagger/docs/v1"
 		}
 	]
 }
