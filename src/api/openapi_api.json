@@ -13,6 +13,10 @@
 			"address": "http://192.168.3.187/swagger/docs/v1"
 		},
 		{
+			"definition": "catarc",
+			"address": "./catarc.openapi.schema.json"
+		},
+		{
 			"definition": "petstore",
 			"address": "https://petstore.swagger.io/v2/swagger.json"
 		},
