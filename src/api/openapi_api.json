@@ -5,8 +5,28 @@
 			"address": "http://192.168.3.185:8080/swagger/Default/swagger.json"
 		},
 		{
+			"definition": "production",
+			"address": "http://192.168.3.185:8080/swagger/Production/swagger.json"
+		},
+		{
+			"definition": "quanlity",
+			"address": "http://192.168.3.185:8080/swagger/Quanlity/swagger.json"
+		},
+		{
+			"definition": "inventory",
+			"address": "http://192.168.3.185:8080/swagger/Inventory/swagger.json"
+		},
+		{
 			"definition": "legacy",
 			"address": "http://192.168.3.187/swagger/docs/v1"
+		},
+		{
+			"definition": "petstore",
+			"address": "https://petstore.swagger.io/v2/swagger.json"
+		},
+		{
+			"definition": "petstore3",
+			"address": "https://petstore3.swagger.io/api/v3/openapi.json"
 		}
 	]
 }

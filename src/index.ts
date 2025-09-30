@@ -20,7 +20,6 @@ const {
 	generateParameterDefinition,
 	generateSchemasDefinition,
 	kebab,
-	RefComponentSuffix,
 } = orval
 
 type Config = {
@@ -83,23 +82,23 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 	const schemasDefinition = generateSchemasDefinition(
 		parsedSchemas,
 		contextArgs,
-		RefComponentSuffix.schemas,
+		context.output.override.components.schemas.suffix,
 		context.input.filters,
 	)
 	const responseDefinition = generateComponentDefinition(
 		spec.components?.responses,
 		contextArgs,
-		RefComponentSuffix.responses,
+		context.output.override.components.responses.suffix,
 	)
 	const bodyDefinition = generateComponentDefinition(
 		spec.components?.requestBodies,
 		contextArgs,
-		RefComponentSuffix.requestBodies,
+		context.output.override.components.requestBodies.suffix,
 	)
 	const parameters = generateParameterDefinition(
 		spec.components?.parameters,
 		contextArgs,
-		RefComponentSuffix.parameters,
+		context.output.override.components.parameters.suffix,
 	)
 
 	const outputDir = resolve('src/api', definition)
@@ -107,7 +106,7 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 	// 建好文件夹
 	await access(outputDir).catch(async (error) => {
 		if (ISDEV) {
-			console.error(
+			console.warn(
 				`\n${pc.bgYellowBright(pc.green('只是警告'))}`,
 				`访问文件夹${outputDir}错误`,
 				error,
@@ -132,7 +131,7 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 		])
 	} catch (error) {
 		if (ISDEV) {
-			console.error(
+			console.warn(
 				`\n${pc.bgYellowBright(pc.green('只是警告'))}`,
 				'deleteAsync错误',
 				error,
@@ -143,22 +142,21 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 	const apiFileGenerates: Promise<void>[] = []
 	const limit = pLimit(8)
 
-	// 所有的通用模型（#/components/schemas）不分组写入一个文件
-	const writeCommonModel = async () => {
+	/**
+	 * 所有的通用模型（#/components/schemas）不分组写入一个文件
+	 */
+	const allCommonSchema = [
+		...schemasDefinition,
+		...responseDefinition,
+		...bodyDefinition,
+		...parameters,
+	]
+	const writeCommonSchema = async () => {
 		await writeFile(
 			resolve(outputDir, '_schemas.gen.ts'),
-			[
-				...schemasDefinition,
-				...responseDefinition,
-				...bodyDefinition,
-				...parameters,
-			]
-				.map((s) => s.model)
-				.join('\n'),
+			allCommonSchema.map((s) => s.model).join('\n'),
 		)
 	}
-
-	apiFileGenerates.push(limit(async () => await writeCommonModel()))
 
 	const apiOperationValues = Object.values(apiOperations)
 
@@ -179,11 +177,20 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 
 				type Imports = (typeof operations)[number]['imports']
 
-				// 这是接口函数文件用到的通用schema
+				/**
+				 * 这是接口函数文件用到的通用schema
+				 * [tag].ts import _schemas.gen.ts
+				 */
 				const commonSchemaImports: Imports = []
-				// 这是接口函数文件用到的特用schema
+				/**
+				 * 这是接口函数文件用到的特用schema
+				 * [tag].ts import [tag].schema.ts
+				 */
 				const schemaImports: Imports = []
-				// 这是接口函数特用schema用到的通用schema
+				/**
+				 * 这是接口函数特用schema用到的通用schema
+				 * [tag].schema.ts import _schemas.gen.ts
+				 */
 				const schemaCommonImports: Imports = []
 
 				operations
@@ -191,23 +198,58 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 					.forEach((meta) => {
 						// 这是接口函数文件用到的通用schema
 						if (meta.schemaName) {
-							commonSchemaImports.push(meta)
+							if (
+								!commonSchemaImports.find(
+									(s) => s.schemaName === meta.schemaName,
+								)
+							) {
+								commonSchemaImports.push(meta)
+							}
 							return
 						}
 
 						// 这是接口函数文件用到的特用schema
-						schemaImports.push(meta)
+						if (!schemaImports.find((s) => s.name === meta.name)) {
+							schemaImports.push(meta)
+						}
 
 						const target = apiSchemas.find(
 							(schema) => schema.name === meta.name,
 						)
-						if (target !== undefined) {
+						if (target) {
 							// 这是接口函数特用schema用到的通用schema
 							schemaCommonImports.push(
-								...target.imports.filter(({ schemaName }) => schemaName),
+								...target.imports.filter(({ name }) => name),
 							)
 						}
 					})
+
+				// 添加不是$ref的schema
+				schemaCommonImports.forEach((schemaCommon) => {
+					const exported = allCommonSchema
+						.map((s) => s.name)
+						.find((name) => name === schemaCommon.name)
+					if (!exported) {
+						const target = apiSchemas.find((s) => s.name === schemaCommon.name)
+						if (target) {
+							allCommonSchema.unshift(target)
+						}
+					}
+				})
+
+				// 把不存在的过滤掉
+				const allCommonSchemaName = allCommonSchema.map((s) => s.name)
+				commonSchemaImports.forEach((schema) => {
+					if (!allCommonSchemaName.includes(schema.name)) {
+						schema.name = ''
+					}
+					if (
+						schema.schemaName &&
+						!allCommonSchemaName.includes(schema.schemaName)
+					) {
+						schema.schemaName = ''
+					}
+				})
 
 				await Promise.all([
 					(async () => {
@@ -215,9 +257,11 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 						const schemaRaw = `${
 							schemaCommonImports.length === 0
 								? ''
-								: `import type {${[...new Set(schemaCommonImports.map(({ name }) => name))].join(',')},} from './_schemas.gen'
-			`
-						}${[...new Set(schemaImports.map(({ name }) => name))].map((name) => apiSchemas.find((s) => s.name === name)?.model).join('\n')}`
+								: `import type {${[...new Set(schemaCommonImports.map(({ name }) => name))].join(',')}} from './_schemas.gen'
+`
+						}
+${[...new Set(schemaImports.map(({ name }) => name))].map((name) => apiSchemas.find((s) => s.name === name)?.model ?? '').join('\n')}
+`
 						if (schemaRaw.trim().length > 0) {
 							await writeFile(
 								resolve(outputDir, `${kebab(tag)}.schema.ts`),
@@ -228,19 +272,18 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 					(async () => {
 						// [tag].ts
 						const implementationRaw = `${IMPORT_MUTATOR}
-			${
-				commonSchemaImports.length === 0
-					? ''
-					: `import type {${[...new Set(commonSchemaImports.map(({ name }) => name))].join(',')},} from './_schemas.gen'
-			`
-			}${
-				schemaImports.length === 0
-					? ''
-					: `import type {${[...new Set(schemaImports.map(({ name }) => name))].join(',')},} from './${kebab(tag)}.schema'
-			`
-			}
-			
-			${implementations.map((implementation) => implementation).join('\n')}`
+${
+	commonSchemaImports.length === 0
+		? ''
+		: `import type {${[...new Set(commonSchemaImports.flatMap(({ name, schemaName }) => [name, schemaName]).filter(Boolean))].join(',')}} from './_schemas.gen'
+`
+}${
+	schemaImports.length === 0
+		? ''
+		: `import type {${[...new Set(schemaImports.map(({ name }) => name))].join(',')}} from './${kebab(tag)}.schema'
+`
+}
+${implementations.map((implementation) => implementation).join('\n')}`
 						if (implementationRaw.trim().length > 0) {
 							await writeFile(
 								resolve(outputDir, `${kebab(tag)}.ts`),
@@ -252,6 +295,8 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 			}),
 		)
 	})
+
+	apiFileGenerates.push(limit(async () => await writeCommonSchema()))
 
 	await Promise.all(apiFileGenerates)
 
@@ -268,7 +313,7 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 		])
 	} catch (error) {
 		if (ISDEV) {
-			console.error(
+			console.warn(
 				`\n${pc.bgYellowBright(pc.green('只是警告'))}`,
 				'biome格式化错误',
 				error,
