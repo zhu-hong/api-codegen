@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
-import { join, resolve } from 'node:path'
+import { resolve } from 'node:path'
 import { relative } from 'node:path/posix'
 import * as p from '@clack/prompts'
 import orval, { type ContextSpecs } from '@orval/core'
@@ -48,12 +48,14 @@ async function loadConfig(): Promise<Config> {
 async function generateAPIFile(api: Config['api_addresses'][number]) {
 	const { address, definition } = api
 
+	const outdir = `src/api/${definition}`
+
 	const context = await _effect_generateContextSpecs({
 		input: {
 			target: address,
 		},
 		output: {
-			target: resolve(join('src/api', definition)),
+			target: resolve(outdir),
 			mode: 'tags',
 			override: {
 				mutator: {
@@ -100,18 +102,18 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 		context.output.override.components.parameters.suffix,
 	)
 
-	const outputDir = resolve('src/api', definition)
+	const outdirAbsolute = resolve(outdir)
 
 	// 建好文件夹
-	await access(outputDir).catch(async (error) => {
+	await access(outdirAbsolute).catch(async (error) => {
 		if (ISDEV) {
 			console.warn(
 				`\n${pc.bgYellowBright(pc.green('只是警告'))}`,
-				`访问文件夹${outputDir}错误`,
+				`访问文件夹${outdirAbsolute}错误`,
 				error,
 			)
 		}
-		await mkdir(outputDir)
+		await mkdir(outdirAbsolute)
 	})
 
 	const { operations: apiOperations, schemas: apiSchemas } =
@@ -123,10 +125,10 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 
 	try {
 		await deleteAsync([
-			join(outputDir, '*'),
-			`!${join(outputDir, '**/')}`,
-			`!${join(outputDir, '_http.ts')}`,
-			`!${join(outputDir, 'openapi_api.json')}`,
+			`${outdir}/*`,
+			`!${outdir}/*/`,
+			`!${outdir}/_http.ts`,
+			`!${outdir}/openapi_api.json`,
 		])
 	} catch (error) {
 		if (ISDEV) {
@@ -152,7 +154,7 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 	]
 	const writeCommonSchema = async () => {
 		await writeFile(
-			resolve(outputDir, '_schemas.gen.ts'),
+			resolve(outdirAbsolute, '_schemas.gen.ts'),
 			allCommonSchema.map((s) => s.model).join('\n'),
 		)
 	}
@@ -263,13 +265,13 @@ ${[...new Set(schemaImports.map(({ name }) => name))].map((name) => apiSchemas.f
 `
 						if (schemaRaw.trim().length > 0) {
 							await writeFile(
-								resolve(outputDir, `${kebab(tag)}.schema.ts`),
+								resolve(outdirAbsolute, `${kebab(tag)}.schema.ts`),
 								schemaRaw,
 							)
 						}
 					})(),
 					(async () => {
-						let mutatorPath = relative(`src/api/${definition}`, 'src/api/_http')
+						let mutatorPath = relative(outdir, 'src/api/_http')
 
 						if (!mutatorPath.startsWith('..')) {
 							mutatorPath = `./${mutatorPath}`
@@ -291,7 +293,7 @@ ${
 ${implementations.map((implementation) => implementation).join('\n')}`
 						if (implementationRaw.trim().length > 0) {
 							await writeFile(
-								resolve(outputDir, `${kebab(tag)}.ts`),
+								resolve(outdirAbsolute, `${kebab(tag)}.ts`),
 								implementationRaw,
 							)
 						}
@@ -310,7 +312,7 @@ ${implementations.map((implementation) => implementation).join('\n')}`
 			'biome',
 			'check',
 			'--write',
-			outputDir,
+			outdirAbsolute,
 			'--formatter-enabled=true',
 			'--javascript-formatter-quote-style=single',
 			'--semicolons=as-needed',
