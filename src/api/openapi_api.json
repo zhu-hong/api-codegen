@@ -23,6 +23,10 @@
 		{
 			"definition": "petstore3",
 			"address": "https://petstore3.swagger.io/api/v3/openapi.json"
+		},
+		{
+			"definition": "fakerestapi",
+			"address": "https://fakerestapi.azurewebsites.net/swagger/v1/swagger.json"
 		}
 	]
 }
