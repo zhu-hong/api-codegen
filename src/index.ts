@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
-import { join, relative, resolve } from 'node:path/posix'
+import { join, resolve } from 'node:path'
+import { relative } from 'node:path/posix'
 import * as p from '@clack/prompts'
 import orval, { type ContextSpecs } from '@orval/core'
 import { deleteAsync } from 'del'
@@ -268,7 +269,7 @@ ${[...new Set(schemaImports.map(({ name }) => name))].map((name) => apiSchemas.f
 						}
 					})(),
 					(async () => {
-						let mutatorPath = relative(outputDir, resolve('src/api/_http'))
+						let mutatorPath = relative(`src/api/${definition}`, 'src/api/_http')
 
 						if (!mutatorPath.startsWith('..')) {
 							mutatorPath = `./${mutatorPath}`
