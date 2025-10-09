@@ -2,6 +2,7 @@
 
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
+import { relative } from 'node:path/posix'
 import * as p from '@clack/prompts'
 import orval, { type ContextSpecs } from '@orval/core'
 import { deleteAsync } from 'del'
@@ -14,7 +15,6 @@ import {
 } from 'orval-effect'
 import pLimit from 'p-limit'
 import pc from 'picocolors'
-import { relative } from 'node:path/posix'
 
 const {
 	generateComponentDefinition,
