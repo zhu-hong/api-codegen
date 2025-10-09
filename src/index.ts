@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
-import { join, resolve } from 'node:path'
+import { join, relative, resolve } from 'node:path'
 import * as p from '@clack/prompts'
 import orval, { type ContextSpecs } from '@orval/core'
 import { deleteAsync } from 'del'
@@ -33,8 +33,6 @@ type Config = {
 const args = process.argv
 
 const ISDEV = args.includes('-d')
-
-const IMPORT_MUTATOR = `import { _http } from '@/api/_http'`
 
 const spin = p.spinner()
 
@@ -270,8 +268,14 @@ ${[...new Set(schemaImports.map(({ name }) => name))].map((name) => apiSchemas.f
 						}
 					})(),
 					(async () => {
+						let mutatorPath = relative(outputDir, resolve('src/api/_http.ts'))
+
+						if (!mutatorPath.startsWith('..')) {
+							mutatorPath = `./${mutatorPath}`
+						}
+
 						// [tag].ts
-						const implementationRaw = `${IMPORT_MUTATOR}
+						const implementationRaw = `import { _http } from '${mutatorPath}'
 ${
 	commonSchemaImports.length === 0
 		? ''

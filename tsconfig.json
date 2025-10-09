@@ -12,6 +12,7 @@
 		"esModuleInterop": true,
 		"skipDefaultLibCheck": true,
 		"allowJs": true,
+		"allowImportingTsExtensions": true,
 
 		/* Bundler mode */
 		"moduleResolution": "bundler",
