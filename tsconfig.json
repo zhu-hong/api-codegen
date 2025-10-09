@@ -1,18 +1,13 @@
 {
 	"compilerOptions": {
-		"baseUrl": ".",
-		"paths": {
-			"@/*": ["src/*"]
-		},
 		"target": "ESNext",
 		"lib": ["ESNext"],
-		"module": "esnext",
+		"module": "ESNext",
 		"skipLibCheck": true,
 		"strictNullChecks": true,
 		"esModuleInterop": true,
 		"skipDefaultLibCheck": true,
 		"allowJs": true,
-		"allowImportingTsExtensions": true,
 
 		/* Bundler mode */
 		"moduleResolution": "bundler",

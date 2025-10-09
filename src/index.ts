@@ -269,7 +269,7 @@ ${[...new Set(schemaImports.map(({ name }) => name))].map((name) => apiSchemas.f
 						}
 					})(),
 					(async () => {
-						let mutatorPath = relative(outputDir, resolve('src/api/_http.ts'))
+						let mutatorPath = relative(outputDir, resolve('src/api/_http'))
 
 						if (!mutatorPath.startsWith('..')) {
 							mutatorPath = `./${mutatorPath}`
