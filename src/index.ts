@@ -2,7 +2,7 @@
 
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
-import { relative } from 'node:path/posix'
+import { parse, relative } from 'node:path/posix'
 import * as p from '@clack/prompts'
 import orval, { type ContextSpecs } from '@orval/core'
 import { deleteAsync } from 'del'
@@ -143,6 +143,8 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 	const apiFileGenerates: Promise<void>[] = []
 	const limit = pLimit(8)
 
+	const exportFiles: string[] = []
+
 	/**
 	 * 所有的通用模型（#/components/schemas）不分组写入一个文件
 	 */
@@ -153,11 +155,15 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 		...parameters,
 	]
 	const writeCommonSchema = async () => {
+		if (allCommonSchema.filter((c) => c.model).length === 0) return
+
 		await writeFile(
 			resolve(outdirAbsolute, '_schemas.gen.ts'),
 			allCommonSchema.map((s) => s.model).join('\n'),
 		)
+		exportFiles.push('_schemas.gen.ts')
 	}
+	apiFileGenerates.push(limit(async () => await writeCommonSchema()))
 
 	const apiOperationValues = Object.values(apiOperations)
 
@@ -268,6 +274,7 @@ ${[...new Set(schemaImports.map(({ name }) => name))].map((name) => apiSchemas.f
 								resolve(outdirAbsolute, `${kebab(tag)}.schema.ts`),
 								schemaRaw,
 							)
+							exportFiles.push(`${kebab(tag)}.schema.ts`)
 						}
 					})(),
 					(async () => {
@@ -296,6 +303,7 @@ ${implementations.map((implementation) => implementation).join('\n')}`
 								resolve(outdirAbsolute, `${kebab(tag)}.ts`),
 								implementationRaw,
 							)
+							exportFiles.push(`${kebab(tag)}.ts`)
 						}
 					})(),
 				])
@@ -303,9 +311,15 @@ ${implementations.map((implementation) => implementation).join('\n')}`
 		)
 	})
 
-	apiFileGenerates.push(limit(async () => await writeCommonSchema()))
-
 	await Promise.all(apiFileGenerates)
+
+	if (exportFiles.length > 0) {
+		await writeFile(
+			resolve(outdirAbsolute, '_export.ts'),
+			`${exportFiles.map((f) => `export * from './${parse(f).name}'`).join('\n')}
+`,
+		)
+	}
 
 	try {
 		await execa('pnpm', [
