@@ -113,7 +113,9 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 				error,
 			)
 		}
-		await mkdir(outdirAbsolute)
+		await mkdir(outdirAbsolute, {
+			recursive: true,
+		})
 	})
 
 	const { operations: apiOperations, schemas: apiSchemas } =
