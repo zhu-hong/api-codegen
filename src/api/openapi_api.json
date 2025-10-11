@@ -1,16 +1,16 @@
 {
 	"api_addresses": [
 		{
+			"definition": "common/legacy",
+			"address": "http://192.168.3.187/swagger/docs/v1"
+		},
+		{
 			"definition": "common",
 			"address": "http://192.168.3.185:8080/swagger/Default/swagger.json"
 		},
 		{
 			"definition": "quanlity",
 			"address": "http://192.168.3.185:8080/swagger/Quanlity/swagger.json"
-		},
-		{
-			"definition": "legacy",
-			"address": "http://192.168.3.187/swagger/docs/v1"
 		},
 		{
 			"definition": "catarc",
