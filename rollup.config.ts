@@ -7,6 +7,11 @@ import pkg from './package.json' with { type: 'json' }
 
 export default defineConfig({
 	input: './src/index.ts',
+	output: {
+		dir: 'dist',
+		format: 'esm',
+		sourcemap: false,
+	},
 	external: [
 		'@clack/prompts',
 		'@orval/core',
@@ -25,9 +30,4 @@ export default defineConfig({
 			__buildVersion: `'${pkg.version}'`,
 		}),
 	],
-	output: {
-		dir: 'dist',
-		format: 'esm',
-		sourcemap: false,
-	},
 })

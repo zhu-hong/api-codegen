@@ -55,6 +55,7 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 			target: address,
 		},
 		output: {
+			httpClient: 'axios',
 			target: resolve(outdir),
 			mode: 'tags',
 			override: {
