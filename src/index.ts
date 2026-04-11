@@ -146,8 +146,6 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 		exportFiles.push('_schemas.gen.ts')
 	}
 
-	apiFileGenerates.push(limit(async () => await writeCommonSchema()))
-
 	const apiOperationValues = Object.values(apiOperations)
 
 	const tags = [...new Set(apiOperationValues.flatMap(({ tags }) => tags))]
@@ -301,6 +299,8 @@ ${implementations.map((implementation) => implementation).join('\n')}`
 			}),
 		)
 	})
+
+	apiFileGenerates.push(limit(async () => await writeCommonSchema()))
 
 	await Promise.all(apiFileGenerates)
 

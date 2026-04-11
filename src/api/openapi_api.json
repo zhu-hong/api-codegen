@@ -7,23 +7,28 @@
 		},
 		{
 			"definition": "common",
-			"address": "schemas/common.json"
+			"address": "schemas/common.json",
+			"generate": true
 		},
 		{
 			"definition": "catarc",
-			"address": "schemas/catarc.json"
+			"address": "schemas/catarc.json",
+			"generate": true
 		},
 		{
 			"definition": "petstore",
-			"address": "https://petstore.swagger.io/v2/swagger.json"
+			"address": "https://petstore.swagger.io/v2/swagger.json",
+			"generate": true
 		},
 		{
 			"definition": "petstore3",
-			"address": "https://petstore3.swagger.io/api/v3/openapi.json"
+			"address": "https://petstore3.swagger.io/api/v3/openapi.json",
+			"generate": true
 		},
 		{
 			"definition": "fakerestapi",
-			"address": "https://fakerestapi.azurewebsites.net/swagger/v1/swagger.json"
+			"address": "https://fakerestapi.azurewebsites.net/swagger/v1/swagger.json",
+			"generate": true
 		}
 	]
 }
