@@ -4,24 +4,18 @@ import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { parse, relative } from 'node:path/posix'
 import * as p from '@clack/prompts'
-import orval, { type ContextSpecs } from '@orval/core'
+import { isString, kebab } from '@orval/core'
+import {
+	_effect_getApiBuilder,
+	applyTransformer,
+	getApiSchemas,
+	normalizeOptions,
+	resolveSpec,
+} from '@zhuh/orval'
 import { deleteAsync } from 'del'
 import { execa } from 'execa'
-import type { SchemasObject } from 'openapi3-ts/oas30'
-import {
-	_effect_generateContextSpecs,
-	_effect_getAllSchemas,
-	_effect_getApiGenerate,
-} from 'orval-effect'
 import pLimit from 'p-limit'
 import pc from 'picocolors'
-
-const {
-	generateComponentDefinition,
-	generateParameterDefinition,
-	generateSchemasDefinition,
-	kebab,
-} = orval
 
 type Config = {
 	api_addresses: {
@@ -30,6 +24,8 @@ type Config = {
 		generate?: boolean
 	}[]
 }
+
+const workspace = process.cwd()
 
 const args = process.argv
 
@@ -50,14 +46,13 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 
 	const outdir = `src/api/${definition}`
 
-	const context = await _effect_generateContextSpecs({
-		input: {
-			target: address,
-		},
+	const outdirAbsolute = resolve(outdir)
+
+	const configOptions = await normalizeOptions({
+		input: address,
 		output: {
 			httpClient: 'axios',
-			target: resolve(outdir),
-			mode: 'tags',
+			target: outdirAbsolute,
 			override: {
 				mutator: {
 					path: resolve('src/api/_http.ts'),
@@ -67,81 +62,62 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 		},
 	})
 
-	const [specKey, spec] = Object.entries(context.specs)[0]
-
-	const contextArgs: ContextSpecs = {
-		specKey,
-		target: context.target,
-		workspace: context.workspace,
-		specs: context.specs,
-		output: context.output,
-	}
-
-	const parsedSchemas = spec.openapi
-		? (spec.components?.schemas as SchemasObject)
-		: _effect_getAllSchemas(spec, specKey)
-
-	const schemasDefinition = generateSchemasDefinition(
-		parsedSchemas,
-		contextArgs,
-		context.output.override.components.schemas.suffix,
-		context.input.filters,
+	const spec = await resolveSpec(
+		configOptions.input.target,
+		configOptions.input.parserOptions,
 	)
-	const responseDefinition = generateComponentDefinition(
-		spec.components?.responses,
-		contextArgs,
-		context.output.override.components.responses.suffix,
+	const transformedOpenApi = await applyTransformer(
+		spec,
+		configOptions.input.override.transformer,
+		workspace,
 	)
-	const bodyDefinition = generateComponentDefinition(
-		spec.components?.requestBodies,
-		contextArgs,
-		context.output.override.components.requestBodies.suffix,
-	)
-	const parameters = generateParameterDefinition(
-		spec.components?.parameters,
-		contextArgs,
-		context.output.override.components.parameters.suffix,
-	)
-
-	const outdirAbsolute = resolve(outdir)
-
-	// 建好文件夹
-	await access(outdirAbsolute).catch(async (error) => {
-		if (ISDEV) {
-			console.warn(
-				`\n${pc.bgYellowBright(pc.green('只是警告'))}`,
-				`访问文件夹${outdirAbsolute}错误`,
-				error,
-			)
-		}
-		await mkdir(outdirAbsolute, {
-			recursive: true,
-		})
-	})
 
 	const { operations: apiOperations, schemas: apiSchemas } =
-		await _effect_getApiGenerate({
-			context: contextArgs,
-			input: context.input,
-			output: context.output,
+		await _effect_getApiBuilder({
+			input: configOptions.input,
+			output: configOptions.output,
+			context: {
+				target: isString(configOptions.input.target)
+					? configOptions.input.target
+					: workspace,
+				workspace,
+				spec: transformedOpenApi,
+				output: configOptions.output,
+			},
 		})
 
-	try {
-		await deleteAsync([
-			`${outdir}/*`,
-			`!${outdir}/*/`,
-			`!${outdir}/_http.ts`,
-			`!${outdir}/openapi_api.json`,
-		])
-	} catch (error) {
-		if (ISDEV) {
-			console.warn(
-				`\n${pc.bgYellowBright(pc.green('只是警告'))}`,
-				'deleteAsync错误',
-				error,
-			)
-		}
-	}
+	// 建好文件夹
+	await access(outdirAbsolute)
+		.then(async () => {
+			try {
+				await deleteAsync([
+					`${outdir}/*`,
+					`!${outdir}/*/`,
+					`!${outdir}/_http.ts`,
+					`!${outdir}/openapi_api.json`,
+				])
+			} catch (error) {
+				if (ISDEV) {
+					console.warn(
+						`\n${pc.bgYellowBright(pc.green('只是警告'))}`,
+						'deleteAsync错误',
+						error,
+					)
+				}
+			}
+		})
+		.catch(async (error) => {
+			if (ISDEV) {
+				console.warn(
+					`\n${pc.bgYellowBright(pc.green('只是警告'))}`,
+					`访问文件夹${outdirAbsolute}错误`,
+					error,
+				)
+			}
+			await mkdir(outdirAbsolute, {
+				recursive: true,
+			})
+		})
 
 	const apiFileGenerates: Promise<void>[] = []
 	const limit = pLimit(8)
@@ -151,12 +127,15 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 	/**
 	 * 所有的通用模型（#/components/schemas）不分组写入一个文件
 	 */
-	const allCommonSchema = [
-		...schemasDefinition,
-		...responseDefinition,
-		...bodyDefinition,
-		...parameters,
-	]
+	const allCommonSchema = getApiSchemas({
+		input: configOptions.input,
+		output: configOptions.output,
+		target: isString(configOptions.input.target)
+			? configOptions.input.target
+			: workspace,
+		workspace,
+		spec: transformedOpenApi,
+	})
 	const writeCommonSchema = async () => {
 		if (allCommonSchema.filter((c) => c.model).length === 0) return
 
@@ -166,6 +145,8 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 		)
 		exportFiles.push('_schemas.gen.ts')
 	}
+
+	apiFileGenerates.push(limit(async () => await writeCommonSchema()))
 
 	const apiOperationValues = Object.values(apiOperations)
 
@@ -190,7 +171,7 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 				 * 这是接口函数文件用到的通用schema
 				 * [tag].ts import _schemas.gen.ts
 				 */
-				const commonSchemaImports: Imports = []
+				let commonSchemaImports: Imports = []
 				/**
 				 * 这是接口函数文件用到的特用schema
 				 * [tag].ts import [tag].schema.ts
@@ -248,16 +229,24 @@ async function generateAPIFile(api: Config['api_addresses'][number]) {
 
 				// 把不存在的过滤掉
 				const allCommonSchemaName = allCommonSchema.map((s) => s.name)
-				commonSchemaImports.forEach((schema) => {
+				commonSchemaImports = commonSchemaImports.map((schema) => {
 					if (!allCommonSchemaName.includes(schema.name)) {
-						schema.name = ''
+						return {
+							...schema,
+							name: '',
+						}
 					}
 					if (
 						schema.schemaName &&
 						!allCommonSchemaName.includes(schema.schemaName)
 					) {
-						schema.schemaName = ''
+						return {
+							...schema,
+							schemaName: '',
+						}
 					}
+
+					return { ...schema }
 				})
 
 				await Promise.all([
@@ -312,8 +301,6 @@ ${implementations.map((implementation) => implementation).join('\n')}`
 			}),
 		)
 	})
-
-	apiFileGenerates.push(limit(async () => await writeCommonSchema()))
 
 	await Promise.all(apiFileGenerates)
 

@@ -15,9 +15,9 @@ export default defineConfig({
 	external: [
 		'@clack/prompts',
 		'@orval/core',
+		'@zhuh/orval',
 		'del',
 		'execa',
-		'orval-effect',
 		'p-limit',
 		'picocolors',
 	],

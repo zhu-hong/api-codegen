@@ -1,0 +1,3574 @@
+{
+	"openapi": "3.0.1",
+	"info": {
+		"title": "公共",
+		"description": "终端公共API",
+		"termsOfService": "https://www.emtob.com",
+		"version": "v1.0"
+	},
+	"paths": {
+		"/ss/session": {
+			"get": {
+				"tags": ["d2mops"],
+				"operationId": "ss-session-Get",
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/api/Common/wechat/markdown": {
+			"post": {
+				"tags": ["Common"],
+				"summary": "发送企业微信消息 - markdown",
+				"operationId": "api-Common-wechat-markdown-Post",
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/WechatMarkdownRequest"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/WechatMarkdownRequest"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/WechatMarkdownRequest"
+							}
+						},
+						"text/plain": {
+							"schema": {
+								"$ref": "#/components/schemas/WechatMarkdownRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/api/Common/employee": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "根据条码获取员工信息",
+				"operationId": "api-Common-employee-Get",
+				"parameters": [
+					{
+						"name": "code",
+						"in": "query",
+						"description": "员工条码",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_EmployeeDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_EmployeeDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_EmployeeDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/employee/all": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "所有员工信息",
+				"operationId": "api-Common-employee-all-Get",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_EmployeeDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_EmployeeDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_EmployeeDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/login": {
+			"post": {
+				"tags": ["Common"],
+				"summary": "登录",
+				"operationId": "api-Common-login-Post",
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginRequest"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginRequest"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginRequest"
+							}
+						},
+						"text/plain": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_EmployeePermissionDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_EmployeePermissionDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_EmployeePermissionDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/update/password": {
+			"post": {
+				"tags": ["Common"],
+				"summary": "修改密码",
+				"operationId": "api-Common-update-password-Post",
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdatePasswordRequest"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdatePasswordRequest"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdatePasswordRequest"
+							}
+						},
+						"text/plain": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdatePasswordRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/Result"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Result"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Result"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/opstype": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "获取终端应用类型",
+				"operationId": "api-Common-opstype-Get",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/upload": {
+			"post": {
+				"tags": ["Common"],
+				"summary": "上传文件",
+				"operationId": "api-Common-upload-Post",
+				"parameters": [
+					{
+						"name": "Type",
+						"in": "query",
+						"description": "附件类型",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AttatchmentType"
+						}
+					},
+					{
+						"name": "ObjectId",
+						"in": "query",
+						"description": "关联对象Id",
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"required": ["File"],
+								"type": "object",
+								"properties": {
+									"File": {
+										"type": "string",
+										"description": "文件",
+										"format": "binary"
+									}
+								}
+							},
+							"encoding": {
+								"File": {
+									"style": "form"
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_UploadFileDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_UploadFileDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_UploadFileDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/url": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "根据文件Key获取文件URL",
+				"operationId": "api-Common-url-Get",
+				"parameters": [
+					{
+						"name": "fileKey",
+						"in": "query",
+						"description": "文件Key，上传文件时生成的唯一Key",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_String"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_String"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_String"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/lotmodel": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "获取产品批号模型",
+				"operationId": "api-Common-lotmodel-Get",
+				"parameters": [
+					{
+						"name": "productId",
+						"in": "query",
+						"description": "产品Id",
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "type",
+						"in": "query",
+						"description": "类型：1、自制（生产）；2、采购",
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_ProductLotModelDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_ProductLotModelDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_ProductLotModelDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/product/version": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "获取产品已发布版本",
+				"operationId": "api-Common-product-version-Get",
+				"parameters": [
+					{
+						"name": "productId",
+						"in": "query",
+						"description": "产品Id",
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/processes": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "获取工艺信息",
+				"operationId": "api-Common-processes-Get",
+				"parameters": [
+					{
+						"name": "productId",
+						"in": "query",
+						"description": "产品Id",
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "productVersion",
+						"in": "query",
+						"description": "产品版本",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_ProcessSegmentDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_ProcessSegmentDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_ProcessSegmentDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/printserver": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "获取打印服务地址",
+				"operationId": "api-Common-printserver-Get",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_String"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_String"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_String"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/label-template-type": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "获取自定义标签类型",
+				"operationId": "api-Common-label-template-type-Get",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_LabelTemplateTypeDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_LabelTemplateTypeDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_LabelTemplateTypeDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/need-print": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "获取操作是否需要打码",
+				"operationId": "api-Common-need-print-Get",
+				"parameters": [
+					{
+						"name": "operation",
+						"in": "query",
+						"description": "操作名称，一下为有效的操作名称：\r\n            物料标记\r\n            批次拆分\r\n            批次合并\r\n            采购收料\r\n            委外收料\r\n            委外制程收料\r\n            生产报工",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_Boolean"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_Boolean"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_Boolean"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/barcode/create": {
+			"post": {
+				"tags": ["Common"],
+				"summary": "生产空的条码",
+				"operationId": "api-Common-barcode-create-Post",
+				"parameters": [
+					{
+						"name": "code",
+						"in": "query",
+						"description": "条码编码，如果提供，则使用提供的编码作为空条码的编码",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_BarCodeDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_BarCodeDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_BarCodeDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/barcode/validate": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "验证空条码有效性",
+				"operationId": "api-Common-barcode-validate-Get",
+				"parameters": [
+					{
+						"name": "code",
+						"in": "query",
+						"description": "空条码编码",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/Result"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Result"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Result"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/location": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "根据工位/库位条码获取信息",
+				"operationId": "api-Common-location-Get",
+				"parameters": [
+					{
+						"name": "code",
+						"in": "query",
+						"description": "工位/库位条码",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_WorkStationDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_WorkStationDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_WorkStationDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/workstations": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "根据工作中心获取该中心下的所有工位",
+				"operationId": "api-Common-workstations-Get",
+				"parameters": [
+					{
+						"name": "workcenterId",
+						"in": "query",
+						"description": "工作中心Id",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkStationDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkStationDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkStationDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/product/codes": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "获取所有产品编码",
+				"operationId": "api-Common-product-codes-Get",
+				"parameters": [
+					{
+						"name": "keyword",
+						"in": "query",
+						"description": "关键字（可为空，如果为空则返回所有产品编码）",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/product/names": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "获取所有产品名称",
+				"operationId": "api-Common-product-names-Get",
+				"parameters": [
+					{
+						"name": "keyword",
+						"in": "query",
+						"description": "关键字（可为空，如果为空则返回所有产品名称）",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/process/codes": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "获取所有制程编号",
+				"operationId": "api-Common-process-codes-Get",
+				"parameters": [
+					{
+						"name": "keyword",
+						"in": "query",
+						"description": "关键字（可为空，如果为空则返回所有制程编号）",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/process/names": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "获取所有制程名称",
+				"operationId": "api-Common-process-names-Get",
+				"parameters": [
+					{
+						"name": "keyword",
+						"in": "query",
+						"description": "关键字（可为空，如果为空则返回所有制程名称）",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/doc/codes": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "获取所有文档编号",
+				"operationId": "api-Common-doc-codes-Get",
+				"parameters": [
+					{
+						"name": "keyword",
+						"in": "query",
+						"description": "关键字（可为空，如果为空则返回所有文档编号）",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/doc/names": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "获取所有文档名称",
+				"operationId": "api-Common-doc-names-Get",
+				"parameters": [
+					{
+						"name": "keyword",
+						"in": "query",
+						"description": "关键字（可为空，如果为空则返回所有文档名称）",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_String"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/sys/time": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "获取时间",
+				"operationId": "api-Common-sys-time-Get",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_DateTime"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_DateTime"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_DateTime"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/workcenter": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "获取生产单位信息",
+				"operationId": "api-Common-workcenter-Get",
+				"parameters": [
+					{
+						"name": "workshopId",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkCenterDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkCenterDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkCenterDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/import": {
+			"post": {
+				"tags": ["Common"],
+				"summary": "Excel导入",
+				"operationId": "api-Common-import-Post",
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"file": {
+										"type": "string",
+										"format": "binary"
+									}
+								}
+							},
+							"encoding": {
+								"file": {
+									"style": "form"
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_ImportResult_TestEntity"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_ImportResult_TestEntity"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_ImportResult_TestEntity"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Common/list/export": {
+			"get": {
+				"tags": ["Common"],
+				"summary": "导出协议解析记录列表为 Excel（xlsx）\r\n参数 ,[FromQuery, Bind(Prefix = \"\")]  ProtocolRecordQuerySchemeFilterDto? filters = null",
+				"operationId": "api-Common-list-export-Get",
+				"parameters": [
+					{
+						"name": "exportAll",
+						"in": "query",
+						"schema": {
+							"type": "boolean",
+							"default": true
+						}
+					},
+					{
+						"name": "maxRows",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32",
+							"default": 20000
+						}
+					},
+					{
+						"name": "page",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32",
+							"default": 1
+						}
+					},
+					{
+						"name": "pageSize",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32",
+							"default": 200
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/api/md/byproduct": {
+			"get": {
+				"tags": ["文档"],
+				"summary": "根据产品获取文档",
+				"operationId": "api-md-byproduct-Get",
+				"parameters": [
+					{
+						"name": "productId",
+						"in": "query",
+						"description": "产品Id",
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "productVersion",
+						"in": "query",
+						"description": "产品版本",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "type",
+						"in": "query",
+						"description": "文档类型，可选，如果为空则返回所有类型的文档，可选择为\"加工\"和\"检验\"",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_DocumentDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_DocumentDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_DocumentDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/md/byprocess": {
+			"get": {
+				"tags": ["文档"],
+				"summary": "根据工序获取文档",
+				"operationId": "api-md-byprocess-Get",
+				"parameters": [
+					{
+						"name": "processId",
+						"in": "query",
+						"description": "工艺Id",
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "type",
+						"in": "query",
+						"description": "文档类型，可选，如果为空则返回所有类型的文档，可选择为\"加工\"和\"检验\"",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_DocumentDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_DocumentDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_DocumentDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/md/default": {
+			"get": {
+				"tags": ["文档"],
+				"summary": "获取默认文档",
+				"operationId": "api-md-default-Get",
+				"parameters": [
+					{
+						"name": "productId",
+						"in": "query",
+						"description": "",
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "productVersion",
+						"in": "query",
+						"description": "",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "processId",
+						"in": "query",
+						"description": "工艺Id",
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "type",
+						"in": "query",
+						"description": "文档类型，可选，如果为空则返回所有类型的文档，可选择为\"加工\"和\"检验\"",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_DocumentDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_DocumentDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_DocumentDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/md/find": {
+			"get": {
+				"tags": ["文档"],
+				"summary": "查找文档",
+				"description": "所有过滤条件都可以为空，如果为空则不对该字段进行过滤",
+				"operationId": "api-md-find-Get",
+				"parameters": [
+					{
+						"name": "productCode",
+						"in": "query",
+						"description": "产品编码",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "productName",
+						"in": "query",
+						"description": "产品名称",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "productSpec",
+						"in": "query",
+						"description": "产品规格",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "processCode",
+						"in": "query",
+						"description": "制程编号",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "processName",
+						"in": "query",
+						"description": "制程名称",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "docCode",
+						"in": "query",
+						"description": "文档编号",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "docName",
+						"in": "query",
+						"description": "文档名称",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "docType",
+						"in": "query",
+						"description": "文档类型，取值为：产品图纸、作业指导书、检验指导书、其他",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "startTime",
+						"in": "query",
+						"description": "开始时间（上传时间时间段）",
+						"schema": {
+							"type": "string",
+							"format": "date-time"
+						}
+					},
+					{
+						"name": "endTime",
+						"in": "query",
+						"description": "结束时间（上传时间时间段）",
+						"schema": {
+							"type": "string",
+							"format": "date-time"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_DocumentDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_DocumentDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_DocumentDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/ops/workshops": {
+			"get": {
+				"tags": ["终端应用"],
+				"summary": "获取区域列表",
+				"operationId": "api-ops-workshops-Get",
+				"parameters": [
+					{
+						"name": "page",
+						"in": "query",
+						"description": "当前页，如果为null则返回所有数据项",
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					},
+					{
+						"name": "size",
+						"in": "query",
+						"description": "页大小，如果为null则返回所有数据项",
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkShopDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkShopDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkShopDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/ops/work-center": {
+			"get": {
+				"tags": ["终端应用"],
+				"summary": "获取工作中心列表",
+				"operationId": "api-ops-work-center-Get",
+				"parameters": [
+					{
+						"name": "type",
+						"in": "query",
+						"description": "存储、加工、检验",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "catagory",
+						"in": "query",
+						"description": "当type等于存储时，可选项：线边库、普通库；当type等于检验时，可选项选项：实验室、检验工站",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkCenterDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkCenterDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkCenterDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/ops/list": {
+			"get": {
+				"tags": ["终端应用"],
+				"summary": "获取区域下一体机列表",
+				"operationId": "api-ops-list-Get",
+				"parameters": [
+					{
+						"name": "workShopId",
+						"in": "query",
+						"description": "区域Id",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "opsType",
+						"in": "query",
+						"description": "一体机类型：可选值为生产工作站;质量工作站;维护工作站。如果该值为空则返回该区域下的所有一体机",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_OPSDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_OPSDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_OPSDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/ops/{opsId}/workcenter": {
+			"get": {
+				"tags": ["终端应用"],
+				"summary": "获取一体机关联的工作中心列表",
+				"operationId": "api-ops-opsId-workcenter-Get",
+				"parameters": [
+					{
+						"name": "opsId",
+						"in": "path",
+						"description": "一体机Id",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkCenterDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkCenterDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkCenterDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/ops/{opsId}/workstation": {
+			"get": {
+				"tags": ["终端应用"],
+				"summary": "获取一体机关联的工位",
+				"operationId": "api-ops-opsId-workstation-Get",
+				"parameters": [
+					{
+						"name": "opsId",
+						"in": "path",
+						"description": "",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkStationDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkStationDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CollectionDataResult_WorkStationDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/ops/verify": {
+			"get": {
+				"tags": ["终端应用"],
+				"summary": "验证终端口令",
+				"operationId": "api-ops-verify-Get",
+				"parameters": [
+					{
+						"name": "password",
+						"in": "query",
+						"description": "终端口令",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/Result"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Result"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Result"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/svcaddress": {
+			"get": {
+				"tags": ["终端壳子"],
+				"summary": "获取终端服务器地址",
+				"operationId": "svcaddress-Get",
+				"parameters": [
+					{
+						"name": "client",
+						"in": "query",
+						"description": "终端类型",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/register": {
+			"post": {
+				"tags": ["终端壳子"],
+				"summary": "注册终端",
+				"operationId": "register-Post",
+				"parameters": [
+					{
+						"name": "client",
+						"in": "query",
+						"description": "终端类型",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "deviceId",
+						"in": "query",
+						"description": "终端唯一标识",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/config": {
+			"get": {
+				"tags": ["终端壳子"],
+				"summary": "获取终端配置信息",
+				"operationId": "config-Get",
+				"parameters": [
+					{
+						"name": "client",
+						"in": "query",
+						"description": "终端类型",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "os",
+						"in": "query",
+						"description": "终端操作系统",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "deviceCode",
+						"in": "query",
+						"description": "终端编码",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_TerminalConfigDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_TerminalConfigDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResult_TerminalConfigDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/healthz": {
+			"get": {
+				"tags": ["终端壳子"],
+				"summary": "",
+				"operationId": "healthz-Get",
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"AttatchmentType": {
+				"enum": ["Inspection", "Defect"],
+				"type": "string",
+				"description": "附件类型<br />&nbsp; Inspection = 0<br />&nbsp; Defect = 1<br />"
+			},
+			"BarCodeDto": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "唯一ID",
+						"format": "uuid"
+					},
+					"code": {
+						"type": "string",
+						"description": "编号",
+						"nullable": true
+					},
+					"associatedTime": {
+						"type": "string",
+						"description": "关联时间",
+						"format": "date-time",
+						"nullable": true
+					},
+					"type": {
+						"type": "string",
+						"description": "物料、人员、设备、单据、位置、容器",
+						"nullable": true
+					},
+					"targetId": {
+						"type": "string",
+						"description": "关联对象ID",
+						"format": "uuid",
+						"nullable": true
+					},
+					"targetCode": {
+						"type": "string",
+						"description": "关联对象编码",
+						"nullable": true
+					},
+					"isAssociated": {
+						"type": "boolean",
+						"description": "状态"
+					},
+					"createTime": {
+						"type": "string",
+						"description": "创建时间",
+						"format": "date-time",
+						"nullable": true
+					},
+					"updateTime": {
+						"type": "string",
+						"description": "更新时间",
+						"format": "date-time",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": "条码"
+			},
+			"CollectionDataResult_DocumentDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"total": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"data": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/DocumentDto"
+						},
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": ""
+			},
+			"CollectionDataResult_EmployeeDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"total": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"data": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/EmployeeDto"
+						},
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": ""
+			},
+			"CollectionDataResult_LabelTemplateTypeDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"total": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"data": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/LabelTemplateTypeDto"
+						},
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": ""
+			},
+			"CollectionDataResult_OPSDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"total": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"data": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/OPSDto"
+						},
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": ""
+			},
+			"CollectionDataResult_ProcessSegmentDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"total": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"data": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/ProcessSegmentDto"
+						},
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": ""
+			},
+			"CollectionDataResult_String": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"total": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"data": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": ""
+			},
+			"CollectionDataResult_WorkCenterDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"total": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"data": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/WorkCenterDto"
+						},
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": ""
+			},
+			"CollectionDataResult_WorkShopDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"total": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"data": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/WorkShopDto"
+						},
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": ""
+			},
+			"CollectionDataResult_WorkStationDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"total": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"data": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/WorkStationDto"
+						},
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": ""
+			},
+			"DataResult_BarCodeDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"data": {
+						"$ref": "#/components/schemas/BarCodeDto"
+					}
+				},
+				"additionalProperties": false,
+				"description": "携带对象数据的返回格式"
+			},
+			"DataResult_Boolean": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"data": {
+						"type": "boolean"
+					}
+				},
+				"additionalProperties": false,
+				"description": "携带对象数据的返回格式"
+			},
+			"DataResult_DateTime": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"data": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"additionalProperties": false,
+				"description": "携带对象数据的返回格式"
+			},
+			"DataResult_DocumentDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"data": {
+						"$ref": "#/components/schemas/DocumentDto"
+					}
+				},
+				"additionalProperties": false,
+				"description": "携带对象数据的返回格式"
+			},
+			"DataResult_EmployeeDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"data": {
+						"$ref": "#/components/schemas/EmployeeDto"
+					}
+				},
+				"additionalProperties": false,
+				"description": "携带对象数据的返回格式"
+			},
+			"DataResult_EmployeePermissionDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"data": {
+						"$ref": "#/components/schemas/EmployeePermissionDto"
+					}
+				},
+				"additionalProperties": false,
+				"description": "携带对象数据的返回格式"
+			},
+			"DataResult_ImportResult_TestEntity": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"data": {
+						"$ref": "#/components/schemas/ImportResult_TestEntity"
+					}
+				},
+				"additionalProperties": false,
+				"description": "携带对象数据的返回格式"
+			},
+			"DataResult_ProductLotModelDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"data": {
+						"$ref": "#/components/schemas/ProductLotModelDto"
+					}
+				},
+				"additionalProperties": false,
+				"description": "携带对象数据的返回格式"
+			},
+			"DataResult_String": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"data": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": "携带对象数据的返回格式"
+			},
+			"DataResult_TerminalConfigDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"data": {
+						"$ref": "#/components/schemas/TerminalConfigDto"
+					}
+				},
+				"additionalProperties": false,
+				"description": "携带对象数据的返回格式"
+			},
+			"DataResult_UploadFileDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"data": {
+						"$ref": "#/components/schemas/UploadFileDto"
+					}
+				},
+				"additionalProperties": false,
+				"description": "携带对象数据的返回格式"
+			},
+			"DataResult_WorkStationDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"data": {
+						"$ref": "#/components/schemas/WorkStationDto"
+					}
+				},
+				"additionalProperties": false,
+				"description": "携带对象数据的返回格式"
+			},
+			"DocumentDto": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"type": "string",
+						"description": "文档编号",
+						"nullable": true
+					},
+					"name": {
+						"type": "string",
+						"description": "文档名称",
+						"nullable": true
+					},
+					"version": {
+						"type": "string",
+						"description": "文档版本号",
+						"nullable": true
+					},
+					"type": {
+						"type": "string",
+						"description": "文档类型",
+						"nullable": true
+					},
+					"catagoryCode": {
+						"type": "string",
+						"description": "文档类别编号",
+						"nullable": true
+					},
+					"catagoryName": {
+						"type": "string",
+						"description": "文档类别名称，",
+						"nullable": true
+					},
+					"productCode": {
+						"type": "string",
+						"description": "产品编码",
+						"nullable": true
+					},
+					"productSpec": {
+						"type": "string",
+						"description": "产品规格",
+						"nullable": true
+					},
+					"productName": {
+						"type": "string",
+						"description": "产品名称",
+						"nullable": true
+					},
+					"productVersion": {
+						"type": "string",
+						"description": "产品版本",
+						"nullable": true
+					},
+					"processCode": {
+						"type": "string",
+						"description": "工艺制程编码",
+						"nullable": true
+					},
+					"processName": {
+						"type": "string",
+						"description": "工艺制程名称",
+						"nullable": true
+					},
+					"fileKey": {
+						"type": "string",
+						"description": "文档Key",
+						"nullable": true
+					},
+					"fileName": {
+						"type": "string",
+						"description": "文件名称",
+						"nullable": true
+					},
+					"fileUrl": {
+						"type": "string",
+						"description": "文件访问URL",
+						"nullable": true
+					},
+					"uploadTime": {
+						"type": "string",
+						"description": "上传时间",
+						"format": "date-time",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": "文档信息"
+			},
+			"DuplicateHandleStrategy": {
+				"enum": ["Skip", "Overwrite", "ThrowError", "CreateNew"],
+				"type": "string",
+				"description": "<br />&nbsp; Skip = 0<br />&nbsp; Overwrite = 1<br />&nbsp; ThrowError = 2<br />&nbsp; CreateNew = 3<br />"
+			},
+			"DuplicateInfo": {
+				"type": "object",
+				"properties": {
+					"rowNumber": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"identityKey": {
+						"type": "string",
+						"nullable": true
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"handleStrategy": {
+						"$ref": "#/components/schemas/DuplicateHandleStrategy"
+					}
+				},
+				"additionalProperties": false
+			},
+			"EmployeeDto": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "Id",
+						"format": "uuid"
+					},
+					"code": {
+						"type": "string",
+						"description": "工号(员工编号)",
+						"nullable": true
+					},
+					"name": {
+						"type": "string",
+						"description": "姓名",
+						"nullable": true
+					},
+					"portrait": {
+						"type": "string",
+						"description": "头像",
+						"nullable": true
+					},
+					"sex": {
+						"type": "boolean",
+						"description": "性别"
+					},
+					"englishName": {
+						"type": "string",
+						"description": "英文名称",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": "职工信息"
+			},
+			"EmployeePermissionDto": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "Id",
+						"format": "uuid"
+					},
+					"code": {
+						"type": "string",
+						"description": "工号(员工编号)",
+						"nullable": true
+					},
+					"name": {
+						"type": "string",
+						"description": "姓名",
+						"nullable": true
+					},
+					"portrait": {
+						"type": "string",
+						"description": "头像",
+						"nullable": true
+					},
+					"sex": {
+						"type": "boolean",
+						"description": "性别"
+					},
+					"englishName": {
+						"type": "string",
+						"description": "英文名称",
+						"nullable": true
+					},
+					"permissions": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/TerminalPermissionDto"
+						},
+						"description": "终端权限,只返回终端下有权限的功能项",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": "职工信息（带终端权限）"
+			},
+			"ImportError": {
+				"type": "object",
+				"properties": {
+					"rowNumber": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"columnName": {
+						"type": "string",
+						"nullable": true
+					},
+					"errorMessage": {
+						"type": "string",
+						"nullable": true
+					},
+					"cellValue": {
+						"additionalProperties": false,
+						"nullable": true
+					}
+				},
+				"additionalProperties": false
+			},
+			"ImportResult_TestEntity": {
+				"type": "object",
+				"properties": {
+					"totalCount": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"successCount": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"failCount": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"duplicateCount": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"userResolvedCount": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"successData": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/TestEntity"
+						},
+						"nullable": true
+					},
+					"errors": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/ImportError"
+						},
+						"nullable": true
+					},
+					"duplicateInfos": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/DuplicateInfo"
+						},
+						"nullable": true
+					},
+					"userResolvedInfos": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/UserResolvedInfo"
+						},
+						"nullable": true
+					}
+				},
+				"additionalProperties": false
+			},
+			"LabelTemplateTypeDto": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "Id",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string",
+						"description": "名称",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": "自定义标签样式类型"
+			},
+			"LoginRequest": {
+				"required": ["password", "userNme"],
+				"type": "object",
+				"properties": {
+					"userNme": {
+						"maxLength": 100,
+						"minLength": 2,
+						"type": "string",
+						"description": "用户名"
+					},
+					"password": {
+						"maxLength": 100,
+						"minLength": 2,
+						"type": "string",
+						"description": "密码"
+					}
+				},
+				"additionalProperties": false,
+				"description": "登录请求数据"
+			},
+			"OPSDto": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "Id",
+						"nullable": true
+					},
+					"code": {
+						"type": "string",
+						"description": "编码",
+						"nullable": true
+					},
+					"name": {
+						"type": "string",
+						"description": "名称",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": "OPS信息"
+			},
+			"ProcessSegmentDto": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "Id",
+						"format": "uuid"
+					},
+					"code": {
+						"type": "string",
+						"description": "编号",
+						"nullable": true
+					},
+					"name": {
+						"type": "string",
+						"description": "名称",
+						"nullable": true
+					},
+					"sno": {
+						"type": "string",
+						"description": "序列号",
+						"nullable": true
+					},
+					"productId": {
+						"type": "string",
+						"description": "产品Id",
+						"format": "uuid",
+						"nullable": true
+					},
+					"version": {
+						"type": "string",
+						"description": "产品版本",
+						"nullable": true
+					},
+					"workShopName": {
+						"type": "string",
+						"description": "加工车间名称",
+						"nullable": true
+					},
+					"workCenterTypeName": {
+						"type": "string",
+						"description": "工作中心",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": "工艺信息"
+			},
+			"ProductLotModelDto": {
+				"type": "object",
+				"properties": {
+					"isCustom": {
+						"type": "boolean",
+						"description": "是否是自定义批模型"
+					}
+				},
+				"additionalProperties": false,
+				"description": ""
+			},
+			"Result": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/ResultCode"
+					},
+					"message": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": "只有成功失败的返回数据格式"
+			},
+			"ResultCode": {
+				"enum": [
+					"Ok",
+					"Unkown",
+					"NotImplement",
+					"Error",
+					"ParamenterInvalid",
+					"Forbidden",
+					"ObjectNotExit",
+					"SCADAServerNotCofnigurated",
+					"UserNotExit",
+					"UserPasswordNotMatch",
+					"UserHasNotEmplyeeData",
+					"EmplyeeNotExist",
+					"ErpPostFail",
+					"OPSSettingEmpty",
+					"OPSSettingInvalid",
+					"WorkCenterNotExist",
+					"BarCodeNotExist",
+					"BarCodeIsEmpty",
+					"BarCodeTypeNotMatch",
+					"EmployeeNotExist",
+					"EmployeeHasTurnover",
+					"EmployeeAlreadySignIn",
+					"WorkStationNotExist",
+					"OPSNotExist",
+					"WorkCenterNotScheduled",
+					"CodingRuleNotExist",
+					"CodingRuleItemNotExist",
+					"CodingFlowCodeUseup",
+					"ProductionTaskNotFound",
+					"WorkCenterProductionNotFound",
+					"ProductNotConfigFAI",
+					"ProductNotConfigPPI",
+					"ProductNotConfigFPI",
+					"ProductionTaskNotStarted",
+					"WorkStationProductionFAIHasPassed",
+					"WorkStationProductionFAIInProcessing",
+					"WorkStationProductionFAIHasCreated",
+					"ProductSublotNotFound",
+					"ProductSublotInWarehouse",
+					"ProductSublotInSpot",
+					"WorkStationNotMatchProductionTask",
+					"EquipmentNotMatchProcessSegment",
+					"ProductSubLotNotInPublishStatus",
+					"ProductSubLotNotInSameProductionOrder",
+					"ProductSubLotNotPurchaseProductionOutSource",
+					"ProductSubLotNotInSameProductionOrder2",
+					"ProductSublotNotInWorkCenter",
+					"InspectionTaskNotExist",
+					"ProductSublotCanNotFeeding",
+					"NoEmpolyeeSignedIn",
+					"NoEmployeeSignedIn",
+					"ProductionTaskNotExist",
+					"ProductionTaskNotMatching",
+					"ProductionPlanPaused",
+					"FeedingMaterialInvalid",
+					"PrapareFormHasCosumed",
+					"PrapareWorkOrderNotMatch",
+					"EmployeeNotERP",
+					"TerminalTypeInvalid",
+					"TerminalOSInvalid",
+					"ProductionTaskAlreadyRunning",
+					"ProductionTaskNotTop",
+					"ProductionTaskNotReview",
+					"OtherProductionTaskAlreadyRunning",
+					"WorkCenterNotSignedIn",
+					"WorkCenterHasNoWorkStations",
+					"ProductionTaskAmountHasCompleted",
+					"ProductionTaskNotRunning",
+					"ProductionTaskNotWithdraw",
+					"ProductSublotNotExist",
+					"EquipmentNotAssociateWorkStation",
+					"MROLedgerNotExist",
+					"MROHasInstalled",
+					"MROLedgerFaulted",
+					"MROLedgerHasScrap",
+					"MROLedgerHasSealed",
+					"MRONotInstalled",
+					"MROIsInUse",
+					"MROMismatching",
+					"ParamsMismatching",
+					"WithdrawAmountCanNotGreaterThenSubLotAmount",
+					"CanNotWithdraw",
+					"ProductionPlanProcessSegmentNotExist",
+					"MROLedgerMaitaining",
+					"MROLedgerInStorage",
+					"MaterialNotMatch",
+					"EquipNotSetup",
+					"FAIInInspecting",
+					"FAINotCreate",
+					"AMOrderNotFound",
+					"AMOrderItemNotFound",
+					"WorkStationProductionAlreadyRunning",
+					"AMOrderHasNotExecuted",
+					"EquipmentSetupNotExecuted",
+					"FAIOrderNotExecuted",
+					"FeedingNotExecuted",
+					"ProductNotFound",
+					"ProductLotModelNotFound",
+					"CustomLotNotProvided",
+					"ProductLotNotFound",
+					"ProductLotModelConfigError",
+					"ProcessConfigError",
+					"PersonNotMatch",
+					"FAIAlreadyCreated",
+					"NotNeedFAI",
+					"MROTypeNotMatch",
+					"MROChildCanNotUninstall",
+					"NoEquipmentConfigurate",
+					"ChildMROCanNotInstallSeparately",
+					"WorkStationProductionNotExist",
+					"WorkStationProductionNotStart",
+					"BarCodeInvalid",
+					"NotConfigBarCodeCodingRule",
+					"WorkCenterNotStorage",
+					"SupplierNotExist",
+					"ProductNotExist",
+					"ReceiptOnlyInLineBuffer",
+					"WorkCenterNotLineBuffer",
+					"WorkCenterNotSimpleInventory",
+					"MaterialPreparationNotExist",
+					"MaterialPreparationHasClosed",
+					"NoNeedPreparation",
+					"SomeSublotCanNotPrepare",
+					"MaterialPraparationOverage",
+					"InspectionTaskNotFound",
+					"ProductSubLotScraped",
+					"WorkCenterIsNotFloorStorage",
+					"WorkCenterIsNotVerticalStorage",
+					"ReceiptNotExist",
+					"ReceiptAlreadyReviewed",
+					"ProductSubLotHasDefect",
+					"ProductSubLotHasFeeding",
+					"FixtureReceiptFormNotFound",
+					"FixtureLedgerNotExist",
+					"FixtureReceiptCountNotMatch",
+					"FixtureReceiptClassNotMatch",
+					"SomeFixtureNeedNotRestore",
+					"SomeFixtureInMaintaining",
+					"SomeFixtureInRepairing",
+					"SomeFixtureScrapped",
+					"SomeFixtureInUsing",
+					"SomeFixtureNotInStorage",
+					"SomeFixtureSealed",
+					"FixtureReceiptFormHasClosed",
+					"PurchaseOrderNotExist",
+					"SupplierNotMatchPurchaseOrder",
+					"ProductNotMatchPurchaseOrder",
+					"SublotNotMatchPurchaseOrder",
+					"SublotAmountMoreThenPurchaseAmount",
+					"SupplierCodeResovleError",
+					"IQCNotCOnfig",
+					"GetLatestProductVersionError",
+					"ProductSublotCanNotInbound",
+					"WorkCenterNotConfigCatagory",
+					"SomeSubLotAlreadyReceived",
+					"ReceiptNotReviewed",
+					"ReceiptNotReviewPassed",
+					"SublotNotInSimpleLocation",
+					"SublotNotBelongToOnePurchaseOrder",
+					"SubLotAlreadyReceived",
+					"SomeSubLotNotReviewedReturn",
+					"SomeProductSublotNotExist",
+					"ProductSublotNotInStorage",
+					"ProductSublotNotInBufferLine",
+					"ProductSublotNotInMaterialForm",
+					"ProductSublotNotInSimpleStorage",
+					"ProductSublotNotInProductionTaskBOM",
+					"ProductSublotInspectionNotPassed",
+					"WorkStationNotProduction",
+					"WorkStationNotBuffline",
+					"SomeProductSubLotNotInBOM",
+					"ProductSubLotAlreadyInSimpleStorage",
+					"ProductSubLotNotInFlatStorage",
+					"ProductSubLotNotInSameStorage",
+					"EmpolyeeNotSignedIn",
+					"AndonRecordAlreadyExisted",
+					"AndonDefinitionNotExist",
+					"AndonRecordNotExist",
+					"AndonResponserNotMatch",
+					"AndonAlreadyReponsed",
+					"AndonAlreadyResolved",
+					"AndonNotResponsed",
+					"AndonResolving",
+					"EquipmentNotExist",
+					"AndonNotResolved",
+					"BarCodeAlreadyBound",
+					"MaintainOrderHasCompleted",
+					"MaintainOrderNotReviewed",
+					"MROIsRepairing",
+					"FixtureIsRepairing",
+					"FixtureIsUsinging",
+					"MROHasScraped",
+					"FixtureHasScraped",
+					"MRONeedNotMaintain",
+					"MRONeedNotRepair",
+					"MROClassNotFound",
+					"MROClassAlreadyInWorkCenter",
+					"FixtureIsMaintaining",
+					"MROIsMaintaining",
+					"OtherMaintainIsProcessing",
+					"FixtureNotNeedCalibrate",
+					"MITIsCalibrating",
+					"MITHasScraped",
+					"MITIsReparing",
+					"MITIsSealed",
+					"MROIsSealed",
+					"MITWaitForValidate",
+					"MITWaitForReview",
+					"MRONeedNotCalibrate",
+					"MITNeedNotMaintain",
+					"FixtureIsSealed",
+					"FixtureWaitForValidate",
+					"FixtureHasFault",
+					"CanlibrationOrderNotFound",
+					"MRONotNeedCanlibrate",
+					"MITNotNeedCanlibrate",
+					"OtherCanlibrationIsProcessing",
+					"PMOrderNotReview",
+					"OperatorNotFound",
+					"SubLotWaitforProcessNotFound",
+					"ParallelOutsourceProcessNotSupport",
+					"SubLotNotWIP",
+					"OutsourceProductionTaskNotFound",
+					"SubLotIsLocked",
+					"EmptyBarCodeNotExist",
+					"LogisticsActivityNotExist",
+					"SubLotIsApproved",
+					"SubLotIsUnderInspection",
+					"SubLotHasPublished",
+					"SubLotIsBlocked",
+					"SubLotLocationNotMatch",
+					"LogisticsTransportionTargetNotMatch",
+					"ProductProcessSegmentNotExist",
+					"BarCodeWithSameCodeAlreadyExist",
+					"HasNoAvailibleSubLot",
+					"TrayCodeNotAssociatedAnySubLot",
+					"BarCodeIsNotTrayOrSubLot",
+					"MROIsInInspectoin",
+					"MROIsInBlocking",
+					"MROLocationNotMatch",
+					"EmptyBarCodeInvalid",
+					"BarCodeAlreadyExistWithSameCode",
+					"InspectionTaskWithPurchaseReceiptNotFound",
+					"PurchseReceiptNeedNotReview",
+					"TargetLocationNotExist",
+					"ProductionNotProcessTask",
+					"ProductionHasNoSubTasks",
+					"ThisProcessNotAllowedFedding",
+					"ThisProcessNotAllowedOutput",
+					"ShippingDocumentNotFound",
+					"MaterialNotInShippingDocument",
+					"NotNeedVerifyCustomerCertification",
+					"CustomerCertificationProductNotMatch",
+					"ShippingDocumentCompleted",
+					"NeitherCeriticationNorBasketNo",
+					"PrintLabelTemplateNotConfigrated",
+					"PlanBomNotExist",
+					"SinglePartNotExist",
+					"StatusIsNotNormal",
+					"ProductionStatusIsNotNormal",
+					"ThisProcessSegmentIsProcessed",
+					"VerifyProcessSegmentNotProcess",
+					"FeedingAreaSublotNotExist",
+					"SublotScannedAmountExceedsLimit",
+					"SinglePartScanInvalid",
+					"NotAllowedScan",
+					"InvalidStatus",
+					"LaserMarkingNotConfigured",
+					"LaserMarkingPlainCodeNotConfigured",
+					"LaserMarkingPlainCodeAgainstTheRules",
+					"BarcodeQuantityDiscrepancy",
+					"NeedTaskCodeOrWorkcenterId",
+					"ScanOnlySupportsSingleTaskMode",
+					"StartTaskFirst",
+					"NotSinglePieceManagement",
+					"SublotMarkedAmountExceedsLimit",
+					"NeedQRCodeOrPlainCode",
+					"SinglePartAlreadyExist",
+					"ProductionPlanNotExist",
+					"ProductionOrderNotExist",
+					"QRCodeHasScan",
+					"InspectOnlySupportsSingleTaskMode",
+					"NotAllowedInspect",
+					"PneumaticGaugeNotConfiguration",
+					"PneumaticGaugeConfigurationDoNotMatch",
+					"SinglePartNotGood",
+					"SinglePartIsInspecting",
+					"ProductionPlanNotLeftLabelAmount",
+					"ProductionPlanNotAllowLabel",
+					"ProductionPlanBomNotAllowLabel",
+					"ProductionPlanMoreThanLeftLabelAmount",
+					"ChildProductionPlanCanotMark",
+					"SinglePartScanProduct",
+					"ProductionTaskMaterialNotExist",
+					"ProductionPlanSubLotMix",
+					"ReceiptPrepCardNotExist",
+					"WithdrawAmountCanNotLessThenZero",
+					"TrayNotHasSublot",
+					"ProductSubLotWithoutTask",
+					"MobileOPSNotSupported",
+					"ProductSubLotHasOutput",
+					"WorkCenterWithoutType",
+					"ProductSubLotNotInPublishOrWip",
+					"MaterialMarkNeedLot",
+					"InspectionSampleNeedLevel",
+					"ProductSubLotNotInInspectionStatus",
+					"ProductSubLotNotDefect",
+					"ProductSubLotMustSame",
+					"ReworkRequestNotFound",
+					"ReworkRequestHasReview",
+					"SubLotCanotFlowCardManagement",
+					"SubLotMustProduction",
+					"SubLotCanotPublishStatus",
+					"SubLotCanotAwaitingPackaging",
+					"SubLotCanotReworkRequest",
+					"SubLotMustWipStatus",
+					"SubLotCanotDefectRegister",
+					"SubLotMustSame",
+					"MaterialPreparationNotFound",
+					"MaterialPreparationSublotHasLock",
+					"MaterialPreparationNotMatch",
+					"ProductSubLotNotPurchase",
+					"ProductSubLotNotERP",
+					"ProductSubLotNotErpID",
+					"RequestAmountMoreThanRequired",
+					"MaterialPreparationNoVirtual",
+					"MaterialPreparationSigned",
+					"MaterialRequisitionNotExist",
+					"MaterialRequisitionMaterialNotExist",
+					"MaterialPreparationHasSigned",
+					"ProductSubLotWorkOrderNotMatch",
+					"PreparationWipNotFlowCardManagement",
+					"PackagingAmountMoreThanBOM",
+					"OutsourcingReceiveNotExist",
+					"OutsourcingReceiveNotExistItem",
+					"SubLotAmountAllLocked",
+					"SubLotProductionPlanSame",
+					"SubLotOutsourceDelivery",
+					"UserHasNotPermission",
+					"BoxLabelNotConfigurated",
+					"ProductSubLotIsTask",
+					"TaskMultiple",
+					"PackageLabelNotConfigurated",
+					"PackagingNoOutput",
+					"QcTaskNoSample",
+					"ProductionSubLotCanotDelivery",
+					"SubLotMustProductionOrPurchase",
+					"ReceiptPrepCardUsed",
+					"MoreThanSubLotAmount",
+					"PackagingAmountMoreThanTaskPlan",
+					"PackagingAmountMoreThanPlan",
+					"MonthNotSame",
+					"ProductSubLotIsComplete",
+					"QualifiedAmountNotMatchSinglePieceAmount",
+					"ProductionTaskNotProcessCard",
+					"UnqualifiedAmountNotMatchSinglePieceAmount",
+					"SinglePeiceAndScanMustOutputAll",
+					"CanNotOutput",
+					"OutputAmountNotMatchPeiceAmount",
+					"ProductSubLotAlreadyFeeded",
+					"ProcessCardModeWithTaskGroupNotSupported",
+					"ProcessCardModeWithParallelNotSupported",
+					"ProcessSegmentConfigurationError",
+					"MaterialLotDifferent",
+					"MaterialFeedingAmountEnough",
+					"SubLotToDoNotExist",
+					"SubLotToDoAmountNotEnough",
+					"SubLotToDoAmountNotEnough2",
+					"SinglePeiceMustProvideFlowCode",
+					"SinglePeiceNotEqualWithdrawalAmount",
+					"CanNotUseCompletenessWithdrawal",
+					"SignlePeiceCanNotUseCompletenessWithdrawal",
+					"NeedAdjustMachine",
+					"ProductionSubLotStatusNotMatch",
+					"FeedingAmountCanNotGreaterThenSubLotAmount",
+					"ReportAmountCanNotGreaterThenScannedAmount",
+					"SubLotIsInPrepareForm",
+					"CanNotChangeWorkCenter",
+					"WorkCenterNotMatchProductionTask",
+					"MasterCardNumerAreDifferent",
+					"ProcessRouteGuidAreDifferent",
+					"ProductSubLotNonFlowCardManagement",
+					"ExecutedProcessSegmentsAreDifferent",
+					"SinglePieceAndForceBatchCanNotConsume",
+					"CustomerBarCodeAlreadyExists",
+					"ProductSubLotAssociatedCustomerCode",
+					"ProductionPlanNotMatched",
+					"MOTNotSupportPackageProcessSegment",
+					"ProductSubLotTypeIsNotPrdBatch",
+					"ProductSubLotStatusIsNotQualified",
+					"ProductSubLotNonSinglePieceMgr",
+					"SinglePartConsumed",
+					"SinglePartPacked",
+					"SinglePartGreaterThanSubLotQuantity",
+					"OutputAmountCanNotGreaterThenReportAmount",
+					"ProductSubLotStatusIsNotFree",
+					"ProductSubLotPropertyMismatch",
+					"ProductSubLotUnboundPallets",
+					"ProductSubLotAssociatedBarCode",
+					"ProductSubLotBoxQuantityNotSatisfied",
+					"ProductSubLotMergeQuantityExceedsStandardBasket",
+					"SubLotMaterialInspectionCannotBeSplit",
+					"OutputAmoutCanNotGTProcessCardAmount",
+					"SubLotNotInMaterialList",
+					"MaterialNotMatchProductionPlan",
+					"WorkCenterNotExistOrHasNoWorkStation",
+					"ProcessCardNotSupportPartialWithdrawal",
+					"MaterialLotNotMatch",
+					"LotNotMatch",
+					"OutsourceLotNotMatch",
+					"ReportAmoutOver",
+					"HasNotSubLotToDo",
+					"UnqulifiedNeedSinglePieceCode",
+					"SinglePeiceMaterialCanNotPartialFeeding",
+					"SinglePeiceAmountNotMatchSubLotAmount",
+					"FeedingAmountNotEnough",
+					"TodoAmountNotMatchWithdrawalAmount",
+					"ProductionTaskAlreadyAssignedWorkCenter",
+					"ProductionTaskNotAssignedWorkCenter",
+					"OutputQuanlityNotEnough",
+					"ProductSubLotExtraPacked",
+					"HasReportCount",
+					"ProcessCardHasStopped",
+					"ProcessCardIsInspecting",
+					"CanNotFindMatchProductionTask",
+					"ThisWorkCenterHasReported",
+					"SinglePartCanNotPartialWithdrawal",
+					"SubLotUnqualified",
+					"SubLotIsInInspection",
+					"FlowCardSplitNotEqualsSerialNum",
+					"CanNotFoundReportWorkStation",
+					"BoxCodeMergePalletsCompleted",
+					"CanNotUseWithdrawalAll",
+					"CanNotSupportOutsourceTask",
+					"CanNotFoundParentPlan",
+					"SinglePartProductNotMatch",
+					"SinglePartHasSacn",
+					"ProductionSubLotInspect",
+					"SinglePartDefectived",
+					"ProductionPlanProcessSegmentIsGroup",
+					"OutsourceDeliveryAmountMoreThanTask",
+					"MaterialNotMatchProductionOrder",
+					"WorkCenterNotMatchProductionPlan",
+					"ProductionPlanProcessSegmentIsOutsource",
+					"OPSNotHasUser",
+					"ProductionPlanProcessSegmentAmount",
+					"PlanProcessSegmentMoreThanAmount",
+					"BomNoLeftQty",
+					"ProductSubLotHasTray",
+					"SubLotNotAllPreProcessSegments",
+					"NextProcessSegmentIsParallel",
+					"OrderBomNoLeftQty",
+					"SinglePartMustDefect",
+					"MaterialNoInspect",
+					"ProductNotInBom",
+					"ProductOrderBomClosed",
+					"ProductOrderBomComplete",
+					"ProductSublotNeedTransferIn",
+					"ProductSublotNotErp",
+					"QRCodeNotRework",
+					"ReportAmountCanNotGreaterThenMarkedAmount",
+					"WarehousingMustSameProductionOrder",
+					"LocationNotExists",
+					"LocationNotERP",
+					"ScrapNotExist",
+					"ProductOrderBomIsEmpty",
+					"ScrapHasStock",
+					"TaskBomNotExist",
+					"ChildTaskNeedNotOpen",
+					"WorkCenterHasNoEnoughWorkStations",
+					"ChildTaskCanNotGet",
+					"ShopNoLayout",
+					"CuttingToolNotExists",
+					"SublotLevelNotMatch",
+					"ProductionPlanSubLotMixLevel",
+					"PlanProcessSegmentIsClose",
+					"ProductionTaskNoLevel",
+					"ProductionTaskLevelNotEqualSublot",
+					"ProductionTaskNotDeleteScan",
+					"ProductionTaskLevelNotEqualQrcode",
+					"ProductionPlanProcessNoLeftScheduling",
+					"LaserMarkingCreateError",
+					"ChangeWorkCenterNotInProcess",
+					"FeedProcessError",
+					"FormNotExist",
+					"FormNotReview",
+					"FormIsReview",
+					"WarehouseNotExist",
+					"ReturnQtyExceedInventory",
+					"MroNotExist",
+					"MroNotMatch",
+					"WarehouseNotMatch",
+					"MroQtyNotEnough",
+					"IssuingQtyExceedInventory",
+					"NoReviewPermission",
+					"RepairRequisitionFormDetailIsCheck",
+					"RepairRequisitionFormDetailIsClose",
+					"RepairRequisitionFormNotExists",
+					"RepairOrderNotExists",
+					"FormDetailIsClose",
+					"ImportDataHasWrong",
+					"SublotScannedAmountExceedsReportLimit",
+					"ReceiptPrepCardHasExist",
+					"SubLotMustSamePlan",
+					"SubLotMustSameLot",
+					"SubLotMustSameMaterialLot",
+					"SubLotMustSameOutsourceLot",
+					"SubLotMustSameProcess",
+					"SubLotMustSameLocation",
+					"CurProductSubLotNonSinglePiece",
+					"BarCodeIsNotAssociation"
+				],
+				"type": "string",
+				"description": "错误码<br />&nbsp; Ok = 0<br />&nbsp; Unkown = 1<br />&nbsp; NotImplement = 2<br />&nbsp; Error = 3<br />&nbsp; ParamenterInvalid = 400<br />&nbsp; Forbidden = 403<br />&nbsp; ObjectNotExit = 404<br />&nbsp; SCADAServerNotCofnigurated = 600<br />&nbsp; UserNotExit = 700<br />&nbsp; UserPasswordNotMatch = 701<br />&nbsp; UserHasNotEmplyeeData = 702<br />&nbsp; EmplyeeNotExist = 703<br />&nbsp; ErpPostFail = 999<br />&nbsp; OPSSettingEmpty = 1000<br />&nbsp; OPSSettingInvalid = 1001<br />&nbsp; WorkCenterNotExist = 1002<br />&nbsp; BarCodeNotExist = 1003<br />&nbsp; BarCodeIsEmpty = 1004<br />&nbsp; BarCodeTypeNotMatch = 1005<br />&nbsp; EmployeeNotExist = 1006<br />&nbsp; EmployeeHasTurnover = 1007<br />&nbsp; EmployeeAlreadySignIn = 1008<br />&nbsp; WorkStationNotExist = 1009<br />&nbsp; OPSNotExist = 1010<br />&nbsp; WorkCenterNotScheduled = 1011<br />&nbsp; CodingRuleNotExist = 1012<br />&nbsp; CodingRuleItemNotExist = 1013<br />&nbsp; CodingFlowCodeUseup = 1014<br />&nbsp; ProductionTaskNotFound = 1015<br />&nbsp; WorkCenterProductionNotFound = 1016<br />&nbsp; ProductNotConfigFAI = 1017<br />&nbsp; ProductNotConfigPPI = 1018<br />&nbsp; ProductNotConfigFPI = 1019<br />&nbsp; ProductionTaskNotStarted = 1020<br />&nbsp; WorkStationProductionFAIHasPassed = 1021<br />&nbsp; WorkStationProductionFAIInProcessing = 1022<br />&nbsp; WorkStationProductionFAIHasCreated = 1023<br />&nbsp; ProductSublotNotFound = 1024<br />&nbsp; ProductSublotInWarehouse = 1025<br />&nbsp; ProductSublotInSpot = 1026<br />&nbsp; WorkStationNotMatchProductionTask = 1027<br />&nbsp; EquipmentNotMatchProcessSegment = 1028<br />&nbsp; ProductSubLotNotInPublishStatus = 1029<br />&nbsp; ProductSubLotNotInSameProductionOrder = 1030<br />&nbsp; ProductSubLotNotPurchaseProductionOutSource = 1031<br />&nbsp; ProductSubLotNotInSameProductionOrder2 = 1032<br />&nbsp; ProductSublotNotInWorkCenter = 1100<br />&nbsp; InspectionTaskNotExist = 1101<br />&nbsp; ProductSublotCanNotFeeding = 1102<br />&nbsp; NoEmpolyeeSignedIn = 1118<br />&nbsp; NoEmployeeSignedIn = 1119<br />&nbsp; ProductionTaskNotExist = 1200<br />&nbsp; ProductionTaskNotMatching = 1201<br />&nbsp; ProductionPlanPaused = 1202<br />&nbsp; FeedingMaterialInvalid = 1203<br />&nbsp; PrapareFormHasCosumed = 1204<br />&nbsp; PrapareWorkOrderNotMatch = 1205<br />&nbsp; EmployeeNotERP = 1999<br />&nbsp; TerminalTypeInvalid = 2000<br />&nbsp; TerminalOSInvalid = 2001<br />&nbsp; ProductionTaskAlreadyRunning = 3002<br />&nbsp; ProductionTaskNotTop = 3003<br />&nbsp; ProductionTaskNotReview = 3004<br />&nbsp; OtherProductionTaskAlreadyRunning = 3005<br />&nbsp; WorkCenterNotSignedIn = 3006<br />&nbsp; WorkCenterHasNoWorkStations = 3007<br />&nbsp; ProductionTaskAmountHasCompleted = 3008<br />&nbsp; ProductionTaskNotRunning = 3009<br />&nbsp; ProductionTaskNotWithdraw = 3010<br />&nbsp; ProductSublotNotExist = 3011<br />&nbsp; EquipmentNotAssociateWorkStation = 3012<br />&nbsp; MROLedgerNotExist = 3013<br />&nbsp; MROHasInstalled = 3014<br />&nbsp; MROLedgerFaulted = 3015<br />&nbsp; MROLedgerHasScrap = 3016<br />&nbsp; MROLedgerHasSealed = 3017<br />&nbsp; MRONotInstalled = 3018<br />&nbsp; MROIsInUse = 3019<br />&nbsp; MROMismatching = 3020<br />&nbsp; ParamsMismatching = 3021<br />&nbsp; WithdrawAmountCanNotGreaterThenSubLotAmount = 3022<br />&nbsp; CanNotWithdraw = 3023<br />&nbsp; ProductionPlanProcessSegmentNotExist = 3024<br />&nbsp; MROLedgerMaitaining = 3025<br />&nbsp; MROLedgerInStorage = 3026<br />&nbsp; MaterialNotMatch = 3027<br />&nbsp; EquipNotSetup = 3028<br />&nbsp; FAIInInspecting = 3029<br />&nbsp; FAINotCreate = 3030<br />&nbsp; AMOrderNotFound = 3031<br />&nbsp; AMOrderItemNotFound = 3032<br />&nbsp; WorkStationProductionAlreadyRunning = 3033<br />&nbsp; AMOrderHasNotExecuted = 3034<br />&nbsp; EquipmentSetupNotExecuted = 3035<br />&nbsp; FAIOrderNotExecuted = 3036<br />&nbsp; FeedingNotExecuted = 3037<br />&nbsp; ProductNotFound = 3038<br />&nbsp; ProductLotModelNotFound = 3039<br />&nbsp; CustomLotNotProvided = 3040<br />&nbsp; ProductLotNotFound = 3041<br />&nbsp; ProductLotModelConfigError = 3042<br />&nbsp; ProcessConfigError = 3043<br />&nbsp; PersonNotMatch = 3044<br />&nbsp; FAIAlreadyCreated = 3045<br />&nbsp; NotNeedFAI = 3046<br />&nbsp; MROTypeNotMatch = 3100<br />&nbsp; MROChildCanNotUninstall = 3101<br />&nbsp; NoEquipmentConfigurate = 3200<br />&nbsp; ChildMROCanNotInstallSeparately = 3201<br />&nbsp; WorkStationProductionNotExist = 3202<br />&nbsp; WorkStationProductionNotStart = 3203<br />&nbsp; BarCodeInvalid = 4000<br />&nbsp; NotConfigBarCodeCodingRule = 5000<br />&nbsp; WorkCenterNotStorage = 5001<br />&nbsp; SupplierNotExist = 5002<br />&nbsp; ProductNotExist = 5003<br />&nbsp; ReceiptOnlyInLineBuffer = 5004<br />&nbsp; WorkCenterNotLineBuffer = 5005<br />&nbsp; WorkCenterNotSimpleInventory = 5006<br />&nbsp; MaterialPreparationNotExist = 5007<br />&nbsp; MaterialPreparationHasClosed = 5008<br />&nbsp; NoNeedPreparation = 5009<br />&nbsp; SomeSublotCanNotPrepare = 5010<br />&nbsp; MaterialPraparationOverage = 5011<br />&nbsp; InspectionTaskNotFound = 6000<br />&nbsp; ProductSubLotScraped = 6001<br />&nbsp; WorkCenterIsNotFloorStorage = 6002<br />&nbsp; WorkCenterIsNotVerticalStorage = 6003<br />&nbsp; ReceiptNotExist = 6004<br />&nbsp; ReceiptAlreadyReviewed = 6005<br />&nbsp; ProductSubLotHasDefect = 6006<br />&nbsp; ProductSubLotHasFeeding = 6007<br />&nbsp; FixtureReceiptFormNotFound = 7000<br />&nbsp; FixtureLedgerNotExist = 7001<br />&nbsp; FixtureReceiptCountNotMatch = 7002<br />&nbsp; FixtureReceiptClassNotMatch = 7003<br />&nbsp; SomeFixtureNeedNotRestore = 7004<br />&nbsp; SomeFixtureInMaintaining = 7005<br />&nbsp; SomeFixtureInRepairing = 7006<br />&nbsp; SomeFixtureScrapped = 7007<br />&nbsp; SomeFixtureInUsing = 7008<br />&nbsp; SomeFixtureNotInStorage = 7009<br />&nbsp; SomeFixtureSealed = 7010<br />&nbsp; FixtureReceiptFormHasClosed = 7011<br />&nbsp; PurchaseOrderNotExist = 8000<br />&nbsp; SupplierNotMatchPurchaseOrder = 8001<br />&nbsp; ProductNotMatchPurchaseOrder = 8002<br />&nbsp; SublotNotMatchPurchaseOrder = 8003<br />&nbsp; SublotAmountMoreThenPurchaseAmount = 8004<br />&nbsp; SupplierCodeResovleError = 8005<br />&nbsp; IQCNotCOnfig = 8006<br />&nbsp; GetLatestProductVersionError = 8007<br />&nbsp; ProductSublotCanNotInbound = 8008<br />&nbsp; WorkCenterNotConfigCatagory = 8009<br />&nbsp; SomeSubLotAlreadyReceived = 8010<br />&nbsp; ReceiptNotReviewed = 8011<br />&nbsp; ReceiptNotReviewPassed = 8012<br />&nbsp; SublotNotInSimpleLocation = 8013<br />&nbsp; SublotNotBelongToOnePurchaseOrder = 8014<br />&nbsp; SubLotAlreadyReceived = 8015<br />&nbsp; SomeSubLotNotReviewedReturn = 8016<br />&nbsp; SomeProductSublotNotExist = 8017<br />&nbsp; ProductSublotNotInStorage = 8018<br />&nbsp; ProductSublotNotInBufferLine = 8019<br />&nbsp; ProductSublotNotInMaterialForm = 8020<br />&nbsp; ProductSublotNotInSimpleStorage = 8021<br />&nbsp; ProductSublotNotInProductionTaskBOM = 8022<br />&nbsp; ProductSublotInspectionNotPassed = 8023<br />&nbsp; WorkStationNotProduction = 8024<br />&nbsp; WorkStationNotBuffline = 8025<br />&nbsp; SomeProductSubLotNotInBOM = 8026<br />&nbsp; ProductSubLotAlreadyInSimpleStorage = 8027<br />&nbsp; ProductSubLotNotInFlatStorage = 8028<br />&nbsp; ProductSubLotNotInSameStorage = 8029<br />&nbsp; EmpolyeeNotSignedIn = 9000<br />&nbsp; AndonRecordAlreadyExisted = 10000<br />&nbsp; AndonDefinitionNotExist = 10001<br />&nbsp; AndonRecordNotExist = 10002<br />&nbsp; AndonResponserNotMatch = 10003<br />&nbsp; AndonAlreadyReponsed = 10004<br />&nbsp; AndonAlreadyResolved = 10005<br />&nbsp; AndonNotResponsed = 10006<br />&nbsp; AndonResolving = 10007<br />&nbsp; EquipmentNotExist = 10008<br />&nbsp; AndonNotResolved = 10009<br />&nbsp; BarCodeAlreadyBound = 11009<br />&nbsp; MaintainOrderHasCompleted = 12000<br />&nbsp; MaintainOrderNotReviewed = 12001<br />&nbsp; MROIsRepairing = 12002<br />&nbsp; FixtureIsRepairing = 12003<br />&nbsp; FixtureIsUsinging = 12004<br />&nbsp; MROHasScraped = 12005<br />&nbsp; FixtureHasScraped = 12006<br />&nbsp; MRONeedNotMaintain = 12007<br />&nbsp; MRONeedNotRepair = 12008<br />&nbsp; MROClassNotFound = 12009<br />&nbsp; MROClassAlreadyInWorkCenter = 12010<br />&nbsp; FixtureIsMaintaining = 12011<br />&nbsp; MROIsMaintaining = 12012<br />&nbsp; OtherMaintainIsProcessing = 12013<br />&nbsp; FixtureNotNeedCalibrate = 12014<br />&nbsp; MITIsCalibrating = 12015<br />&nbsp; MITHasScraped = 12016<br />&nbsp; MITIsReparing = 12017<br />&nbsp; MITIsSealed = 12018<br />&nbsp; MROIsSealed = 12019<br />&nbsp; MITWaitForValidate = 12020<br />&nbsp; MITWaitForReview = 12021<br />&nbsp; MRONeedNotCalibrate = 12022<br />&nbsp; MITNeedNotMaintain = 12023<br />&nbsp; FixtureIsSealed = 12024<br />&nbsp; FixtureWaitForValidate = 12025<br />&nbsp; FixtureHasFault = 12026<br />&nbsp; CanlibrationOrderNotFound = 12027<br />&nbsp; MRONotNeedCanlibrate = 12028<br />&nbsp; MITNotNeedCanlibrate = 12029<br />&nbsp; OtherCanlibrationIsProcessing = 12030<br />&nbsp; PMOrderNotReview = 13000<br />&nbsp; OperatorNotFound = 13001<br />&nbsp; SubLotWaitforProcessNotFound = 14000<br />&nbsp; ParallelOutsourceProcessNotSupport = 14001<br />&nbsp; SubLotNotWIP = 14002<br />&nbsp; OutsourceProductionTaskNotFound = 14003<br />&nbsp; SubLotIsLocked = 14004<br />&nbsp; EmptyBarCodeNotExist = 14005<br />&nbsp; LogisticsActivityNotExist = 14006<br />&nbsp; SubLotIsApproved = 14007<br />&nbsp; SubLotIsUnderInspection = 14008<br />&nbsp; SubLotHasPublished = 14009<br />&nbsp; SubLotIsBlocked = 14010<br />&nbsp; SubLotLocationNotMatch = 14011<br />&nbsp; LogisticsTransportionTargetNotMatch = 14012<br />&nbsp; ProductProcessSegmentNotExist = 14013<br />&nbsp; BarCodeWithSameCodeAlreadyExist = 14014<br />&nbsp; HasNoAvailibleSubLot = 14015<br />&nbsp; TrayCodeNotAssociatedAnySubLot = 14016<br />&nbsp; BarCodeIsNotTrayOrSubLot = 14017<br />&nbsp; MROIsInInspectoin = 14018<br />&nbsp; MROIsInBlocking = 14019<br />&nbsp; MROLocationNotMatch = 14020<br />&nbsp; EmptyBarCodeInvalid = 14021<br />&nbsp; BarCodeAlreadyExistWithSameCode = 14022<br />&nbsp; InspectionTaskWithPurchaseReceiptNotFound = 14023<br />&nbsp; PurchseReceiptNeedNotReview = 14024<br />&nbsp; TargetLocationNotExist = 14025<br />&nbsp; ProductionNotProcessTask = 14026<br />&nbsp; ProductionHasNoSubTasks = 14027<br />&nbsp; ThisProcessNotAllowedFedding = 14028<br />&nbsp; ThisProcessNotAllowedOutput = 14029<br />&nbsp; ShippingDocumentNotFound = 14030<br />&nbsp; MaterialNotInShippingDocument = 14031<br />&nbsp; NotNeedVerifyCustomerCertification = 14032<br />&nbsp; CustomerCertificationProductNotMatch = 14033<br />&nbsp; ShippingDocumentCompleted = 14034<br />&nbsp; NeitherCeriticationNorBasketNo = 14035<br />&nbsp; PrintLabelTemplateNotConfigrated = 14036<br />&nbsp; PlanBomNotExist = 14037<br />&nbsp; SinglePartNotExist = 15001<br />&nbsp; StatusIsNotNormal = 15002<br />&nbsp; ProductionStatusIsNotNormal = 15003<br />&nbsp; ThisProcessSegmentIsProcessed = 15004<br />&nbsp; VerifyProcessSegmentNotProcess = 15005<br />&nbsp; FeedingAreaSublotNotExist = 15006<br />&nbsp; SublotScannedAmountExceedsLimit = 15007<br />&nbsp; SinglePartScanInvalid = 15008<br />&nbsp; NotAllowedScan = 15009<br />&nbsp; InvalidStatus = 15010<br />&nbsp; LaserMarkingNotConfigured = 15011<br />&nbsp; LaserMarkingPlainCodeNotConfigured = 15012<br />&nbsp; LaserMarkingPlainCodeAgainstTheRules = 15013<br />&nbsp; BarcodeQuantityDiscrepancy = 15014<br />&nbsp; NeedTaskCodeOrWorkcenterId = 15015<br />&nbsp; ScanOnlySupportsSingleTaskMode = 15016<br />&nbsp; StartTaskFirst = 15017<br />&nbsp; NotSinglePieceManagement = 15018<br />&nbsp; SublotMarkedAmountExceedsLimit = 15019<br />&nbsp; NeedQRCodeOrPlainCode = 15020<br />&nbsp; SinglePartAlreadyExist = 15021<br />&nbsp; ProductionPlanNotExist = 15022<br />&nbsp; ProductionOrderNotExist = 15023<br />&nbsp; QRCodeHasScan = 15024<br />&nbsp; InspectOnlySupportsSingleTaskMode = 15025<br />&nbsp; NotAllowedInspect = 15026<br />&nbsp; PneumaticGaugeNotConfiguration = 15027<br />&nbsp; PneumaticGaugeConfigurationDoNotMatch = 15028<br />&nbsp; SinglePartNotGood = 15029<br />&nbsp; SinglePartIsInspecting = 15030<br />&nbsp; ProductionPlanNotLeftLabelAmount = 15031<br />&nbsp; ProductionPlanNotAllowLabel = 15032<br />&nbsp; ProductionPlanBomNotAllowLabel = 15033<br />&nbsp; ProductionPlanMoreThanLeftLabelAmount = 15034<br />&nbsp; ChildProductionPlanCanotMark = 15035<br />&nbsp; SinglePartScanProduct = 15036<br />&nbsp; ProductionTaskMaterialNotExist = 16000<br />&nbsp; ProductionPlanSubLotMix = 16001<br />&nbsp; ReceiptPrepCardNotExist = 16002<br />&nbsp; WithdrawAmountCanNotLessThenZero = 16003<br />&nbsp; TrayNotHasSublot = 16004<br />&nbsp; ProductSubLotWithoutTask = 16005<br />&nbsp; MobileOPSNotSupported = 16006<br />&nbsp; ProductSubLotHasOutput = 16007<br />&nbsp; WorkCenterWithoutType = 16008<br />&nbsp; ProductSubLotNotInPublishOrWip = 16009<br />&nbsp; MaterialMarkNeedLot = 16010<br />&nbsp; InspectionSampleNeedLevel = 16011<br />&nbsp; ProductSubLotNotInInspectionStatus = 16012<br />&nbsp; ProductSubLotNotDefect = 16013<br />&nbsp; ProductSubLotMustSame = 16014<br />&nbsp; ReworkRequestNotFound = 16015<br />&nbsp; ReworkRequestHasReview = 16016<br />&nbsp; SubLotCanotFlowCardManagement = 16017<br />&nbsp; SubLotMustProduction = 16018<br />&nbsp; SubLotCanotPublishStatus = 16019<br />&nbsp; SubLotCanotAwaitingPackaging = 16020<br />&nbsp; SubLotCanotReworkRequest = 16021<br />&nbsp; SubLotMustWipStatus = 16022<br />&nbsp; SubLotCanotDefectRegister = 16023<br />&nbsp; SubLotMustSame = 16024<br />&nbsp; MaterialPreparationNotFound = 16025<br />&nbsp; MaterialPreparationSublotHasLock = 16026<br />&nbsp; MaterialPreparationNotMatch = 16027<br />&nbsp; ProductSubLotNotPurchase = 16028<br />&nbsp; ProductSubLotNotERP = 16029<br />&nbsp; ProductSubLotNotErpID = 16030<br />&nbsp; RequestAmountMoreThanRequired = 16031<br />&nbsp; MaterialPreparationNoVirtual = 16032<br />&nbsp; MaterialPreparationSigned = 16033<br />&nbsp; MaterialRequisitionNotExist = 16034<br />&nbsp; MaterialRequisitionMaterialNotExist = 16035<br />&nbsp; MaterialPreparationHasSigned = 16036<br />&nbsp; ProductSubLotWorkOrderNotMatch = 16037<br />&nbsp; PreparationWipNotFlowCardManagement = 16038<br />&nbsp; PackagingAmountMoreThanBOM = 16039<br />&nbsp; OutsourcingReceiveNotExist = 16040<br />&nbsp; OutsourcingReceiveNotExistItem = 16041<br />&nbsp; SubLotAmountAllLocked = 16042<br />&nbsp; SubLotProductionPlanSame = 16043<br />&nbsp; SubLotOutsourceDelivery = 16044<br />&nbsp; UserHasNotPermission = 16045<br />&nbsp; BoxLabelNotConfigurated = 16046<br />&nbsp; ProductSubLotIsTask = 16047<br />&nbsp; TaskMultiple = 16048<br />&nbsp; PackageLabelNotConfigurated = 16049<br />&nbsp; PackagingNoOutput = 16050<br />&nbsp; QcTaskNoSample = 16051<br />&nbsp; ProductionSubLotCanotDelivery = 16052<br />&nbsp; SubLotMustProductionOrPurchase = 16053<br />&nbsp; ReceiptPrepCardUsed = 16054<br />&nbsp; MoreThanSubLotAmount = 16055<br />&nbsp; PackagingAmountMoreThanTaskPlan = 16056<br />&nbsp; PackagingAmountMoreThanPlan = 16057<br />&nbsp; MonthNotSame = 16058<br />&nbsp; ProductSubLotIsComplete = 16059<br />&nbsp; QualifiedAmountNotMatchSinglePieceAmount = 17007<br />&nbsp; ProductionTaskNotProcessCard = 17008<br />&nbsp; UnqualifiedAmountNotMatchSinglePieceAmount = 17009<br />&nbsp; SinglePeiceAndScanMustOutputAll = 17010<br />&nbsp; CanNotOutput = 17011<br />&nbsp; OutputAmountNotMatchPeiceAmount = 17012<br />&nbsp; ProductSubLotAlreadyFeeded = 17013<br />&nbsp; ProcessCardModeWithTaskGroupNotSupported = 17014<br />&nbsp; ProcessCardModeWithParallelNotSupported = 17015<br />&nbsp; ProcessSegmentConfigurationError = 17016<br />&nbsp; MaterialLotDifferent = 17017<br />&nbsp; MaterialFeedingAmountEnough = 17018<br />&nbsp; SubLotToDoNotExist = 17019<br />&nbsp; SubLotToDoAmountNotEnough = 17020<br />&nbsp; SubLotToDoAmountNotEnough2 = 17021<br />&nbsp; SinglePeiceMustProvideFlowCode = 17022<br />&nbsp; SinglePeiceNotEqualWithdrawalAmount = 17023<br />&nbsp; CanNotUseCompletenessWithdrawal = 17024<br />&nbsp; SignlePeiceCanNotUseCompletenessWithdrawal = 17025<br />&nbsp; NeedAdjustMachine = 17026<br />&nbsp; ProductionSubLotStatusNotMatch = 17027<br />&nbsp; FeedingAmountCanNotGreaterThenSubLotAmount = 17028<br />&nbsp; ReportAmountCanNotGreaterThenScannedAmount = 17029<br />&nbsp; SubLotIsInPrepareForm = 17030<br />&nbsp; CanNotChangeWorkCenter = 17031<br />&nbsp; WorkCenterNotMatchProductionTask = 17032<br />&nbsp; MasterCardNumerAreDifferent = 17033<br />&nbsp; ProcessRouteGuidAreDifferent = 17034<br />&nbsp; ProductSubLotNonFlowCardManagement = 17035<br />&nbsp; ExecutedProcessSegmentsAreDifferent = 17036<br />&nbsp; SinglePieceAndForceBatchCanNotConsume = 17037<br />&nbsp; CustomerBarCodeAlreadyExists = 17038<br />&nbsp; ProductSubLotAssociatedCustomerCode = 17039<br />&nbsp; ProductionPlanNotMatched = 17040<br />&nbsp; MOTNotSupportPackageProcessSegment = 17041<br />&nbsp; ProductSubLotTypeIsNotPrdBatch = 17042<br />&nbsp; ProductSubLotStatusIsNotQualified = 17043<br />&nbsp; ProductSubLotNonSinglePieceMgr = 17044<br />&nbsp; SinglePartConsumed = 17045<br />&nbsp; SinglePartPacked = 17046<br />&nbsp; SinglePartGreaterThanSubLotQuantity = 17047<br />&nbsp; OutputAmountCanNotGreaterThenReportAmount = 17048<br />&nbsp; ProductSubLotStatusIsNotFree = 17049<br />&nbsp; ProductSubLotPropertyMismatch = 17050<br />&nbsp; ProductSubLotUnboundPallets = 17051<br />&nbsp; ProductSubLotAssociatedBarCode = 17052<br />&nbsp; ProductSubLotBoxQuantityNotSatisfied = 17053<br />&nbsp; ProductSubLotMergeQuantityExceedsStandardBasket = 17055<br />&nbsp; SubLotMaterialInspectionCannotBeSplit = 17056<br />&nbsp; OutputAmoutCanNotGTProcessCardAmount = 17057<br />&nbsp; SubLotNotInMaterialList = 17058<br />&nbsp; MaterialNotMatchProductionPlan = 17059<br />&nbsp; WorkCenterNotExistOrHasNoWorkStation = 17060<br />&nbsp; ProcessCardNotSupportPartialWithdrawal = 17061<br />&nbsp; MaterialLotNotMatch = 17062<br />&nbsp; LotNotMatch = 17063<br />&nbsp; OutsourceLotNotMatch = 17064<br />&nbsp; ReportAmoutOver = 17065<br />&nbsp; HasNotSubLotToDo = 17066<br />&nbsp; UnqulifiedNeedSinglePieceCode = 17067<br />&nbsp; SinglePeiceMaterialCanNotPartialFeeding = 17068<br />&nbsp; SinglePeiceAmountNotMatchSubLotAmount = 17069<br />&nbsp; FeedingAmountNotEnough = 17070<br />&nbsp; TodoAmountNotMatchWithdrawalAmount = 17071<br />&nbsp; ProductionTaskAlreadyAssignedWorkCenter = 17072<br />&nbsp; ProductionTaskNotAssignedWorkCenter = 17073<br />&nbsp; OutputQuanlityNotEnough = 17074<br />&nbsp; ProductSubLotExtraPacked = 17075<br />&nbsp; HasReportCount = 17076<br />&nbsp; ProcessCardHasStopped = 17077<br />&nbsp; ProcessCardIsInspecting = 17078<br />&nbsp; CanNotFindMatchProductionTask = 17079<br />&nbsp; ThisWorkCenterHasReported = 17080<br />&nbsp; SinglePartCanNotPartialWithdrawal = 17081<br />&nbsp; SubLotUnqualified = 17082<br />&nbsp; SubLotIsInInspection = 17083<br />&nbsp; FlowCardSplitNotEqualsSerialNum = 17084<br />&nbsp; CanNotFoundReportWorkStation = 17085<br />&nbsp; BoxCodeMergePalletsCompleted = 17086<br />&nbsp; CanNotUseWithdrawalAll = 17087<br />&nbsp; CanNotSupportOutsourceTask = 17088<br />&nbsp; CanNotFoundParentPlan = 17089<br />&nbsp; SinglePartProductNotMatch = 17090<br />&nbsp; SinglePartHasSacn = 17091<br />&nbsp; ProductionSubLotInspect = 17092<br />&nbsp; SinglePartDefectived = 17093<br />&nbsp; ProductionPlanProcessSegmentIsGroup = 17094<br />&nbsp; OutsourceDeliveryAmountMoreThanTask = 17095<br />&nbsp; MaterialNotMatchProductionOrder = 17096<br />&nbsp; WorkCenterNotMatchProductionPlan = 17097<br />&nbsp; ProductionPlanProcessSegmentIsOutsource = 17098<br />&nbsp; OPSNotHasUser = 17099<br />&nbsp; ProductionPlanProcessSegmentAmount = 17100<br />&nbsp; PlanProcessSegmentMoreThanAmount = 17101<br />&nbsp; BomNoLeftQty = 17102<br />&nbsp; ProductSubLotHasTray = 17103<br />&nbsp; SubLotNotAllPreProcessSegments = 17104<br />&nbsp; NextProcessSegmentIsParallel = 17105<br />&nbsp; OrderBomNoLeftQty = 17106<br />&nbsp; SinglePartMustDefect = 17107<br />&nbsp; MaterialNoInspect = 17108<br />&nbsp; ProductNotInBom = 17109<br />&nbsp; ProductOrderBomClosed = 17110<br />&nbsp; ProductOrderBomComplete = 17111<br />&nbsp; ProductSublotNeedTransferIn = 17112<br />&nbsp; ProductSublotNotErp = 17113<br />&nbsp; QRCodeNotRework = 17114<br />&nbsp; ReportAmountCanNotGreaterThenMarkedAmount = 17115<br />&nbsp; WarehousingMustSameProductionOrder = 17116<br />&nbsp; LocationNotExists = 17117<br />&nbsp; LocationNotERP = 17118<br />&nbsp; ScrapNotExist = 17119<br />&nbsp; ProductOrderBomIsEmpty = 17120<br />&nbsp; ScrapHasStock = 17121<br />&nbsp; TaskBomNotExist = 17122<br />&nbsp; ChildTaskNeedNotOpen = 17123<br />&nbsp; WorkCenterHasNoEnoughWorkStations = 17124<br />&nbsp; ChildTaskCanNotGet = 17125<br />&nbsp; ShopNoLayout = 17126<br />&nbsp; CuttingToolNotExists = 17127<br />&nbsp; SublotLevelNotMatch = 17128<br />&nbsp; ProductionPlanSubLotMixLevel = 17129<br />&nbsp; PlanProcessSegmentIsClose = 17130<br />&nbsp; ProductionTaskNoLevel = 17131<br />&nbsp; ProductionTaskLevelNotEqualSublot = 17132<br />&nbsp; ProductionTaskNotDeleteScan = 17133<br />&nbsp; ProductionTaskLevelNotEqualQrcode = 17134<br />&nbsp; ProductionPlanProcessNoLeftScheduling = 17135<br />&nbsp; LaserMarkingCreateError = 17136<br />&nbsp; ChangeWorkCenterNotInProcess = 17137<br />&nbsp; FeedProcessError = 17138<br />&nbsp; FormNotExist = 17999<br />&nbsp; FormNotReview = 18000<br />&nbsp; FormIsReview = 18001<br />&nbsp; WarehouseNotExist = 18002<br />&nbsp; ReturnQtyExceedInventory = 18003<br />&nbsp; MroNotExist = 18004<br />&nbsp; MroNotMatch = 18005<br />&nbsp; WarehouseNotMatch = 18006<br />&nbsp; MroQtyNotEnough = 18007<br />&nbsp; IssuingQtyExceedInventory = 18008<br />&nbsp; NoReviewPermission = 18009<br />&nbsp; RepairRequisitionFormDetailIsCheck = 18010<br />&nbsp; RepairRequisitionFormDetailIsClose = 18011<br />&nbsp; RepairRequisitionFormNotExists = 18012<br />&nbsp; RepairOrderNotExists = 18013<br />&nbsp; FormDetailIsClose = 18014<br />&nbsp; ImportDataHasWrong = 18500<br />&nbsp; SublotScannedAmountExceedsReportLimit = 150071<br />&nbsp; ReceiptPrepCardHasExist = 160021<br />&nbsp; SubLotMustSamePlan = 160241<br />&nbsp; SubLotMustSameLot = 160242<br />&nbsp; SubLotMustSameMaterialLot = 160243<br />&nbsp; SubLotMustSameOutsourceLot = 160244<br />&nbsp; SubLotMustSameProcess = 160245<br />&nbsp; SubLotMustSameLocation = 160246<br />&nbsp; CurProductSubLotNonSinglePiece = 170489<br />&nbsp; BarCodeIsNotAssociation = 170490<br />"
+			},
+			"TerminalConfigDto": {
+				"type": "object",
+				"properties": {
+					"api": {
+						"type": "string",
+						"description": "",
+						"nullable": true
+					},
+					"appCastUrl": {
+						"type": "string",
+						"description": "",
+						"nullable": true
+					},
+					"entries": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/TerminalConfigEntry"
+						},
+						"description": "",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": ""
+			},
+			"TerminalConfigEntry": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "入口名字",
+						"nullable": true
+					},
+					"url": {
+						"type": "string",
+						"description": "入口URL",
+						"nullable": true
+					},
+					"description": {
+						"type": "string",
+						"description": "描述",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": "终端入口配置信息"
+			},
+			"TerminalPermissionDto": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "终端名称",
+						"nullable": true
+					},
+					"functions": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"description": "有操作权限的功能",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": "终端操作权限"
+			},
+			"TestEntity": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "",
+						"nullable": true
+					},
+					"type": {
+						"type": "string",
+						"description": "",
+						"nullable": true
+					},
+					"date": {
+						"type": "string",
+						"description": "",
+						"format": "date-time",
+						"nullable": true
+					},
+					"value": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false
+			},
+			"UpdatePasswordRequest": {
+				"required": ["newPassword", "oldPassword", "userId"],
+				"type": "object",
+				"properties": {
+					"userId": {
+						"type": "string",
+						"description": "用户名",
+						"format": "uuid"
+					},
+					"oldPassword": {
+						"maxLength": 100,
+						"minLength": 2,
+						"type": "string",
+						"description": "旧密码"
+					},
+					"newPassword": {
+						"maxLength": 100,
+						"minLength": 2,
+						"type": "string",
+						"description": "新密码"
+					}
+				},
+				"additionalProperties": false,
+				"description": "修改密码"
+			},
+			"UploadFileDto": {
+				"type": "object",
+				"properties": {
+					"fileKey": {
+						"type": "string",
+						"description": "Key",
+						"nullable": true
+					},
+					"fileName": {
+						"type": "string",
+						"description": "文件名",
+						"nullable": true
+					},
+					"url": {
+						"type": "string",
+						"description": "文件访问Url",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": "上传文件信息"
+			},
+			"UserResolvedInfo": {
+				"type": "object",
+				"properties": {
+					"rowNumber": {
+						"type": "integer",
+						"format": "int32"
+					}
+				},
+				"additionalProperties": false
+			},
+			"WechatMarkdownRequest": {
+				"required": ["agentId", "content", "corpid", "corpsecret", "touser"],
+				"type": "object",
+				"properties": {
+					"corpid": {
+						"minLength": 1,
+						"type": "string",
+						"description": "企业CorpID"
+					},
+					"corpsecret": {
+						"minLength": 1,
+						"type": "string",
+						"description": "应用Secret"
+					},
+					"agentId": {
+						"type": "integer",
+						"description": "应用AgentId",
+						"format": "int64"
+					},
+					"touser": {
+						"minLength": 1,
+						"type": "string",
+						"description": "指定接收消息的成员，成员ID列表（多个接收者用‘|’分隔，最多支持1000个）"
+					},
+					"content": {
+						"minLength": 1,
+						"type": "string",
+						"description": "消息内容"
+					}
+				},
+				"additionalProperties": false,
+				"description": "更改打印模式"
+			},
+			"WorkCenterDto": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "唯一ID",
+						"format": "uuid"
+					},
+					"type": {
+						"type": "string",
+						"description": "类型\r\n存储、加工、检验",
+						"nullable": true
+					},
+					"catagory": {
+						"type": "string",
+						"description": "类别",
+						"nullable": true
+					},
+					"code": {
+						"type": "string",
+						"description": "工作中心编码",
+						"nullable": true
+					},
+					"name": {
+						"type": "string",
+						"description": "工作中心名称",
+						"nullable": true
+					},
+					"workShopId": {
+						"type": "string",
+						"description": "关联区域ID",
+						"format": "uuid"
+					},
+					"workShopName": {
+						"type": "string",
+						"description": "关联区域",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": "工作中心"
+			},
+			"WorkShopDto": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "区域Id",
+						"format": "uuid"
+					},
+					"code": {
+						"type": "string",
+						"description": "区域编码",
+						"nullable": true
+					},
+					"name": {
+						"type": "string",
+						"description": "区域名称",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": "区域信息"
+			},
+			"WorkStationDto": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "工位ID",
+						"format": "uuid"
+					},
+					"code": {
+						"type": "string",
+						"description": "工位编码",
+						"nullable": true
+					},
+					"name": {
+						"type": "string",
+						"description": "工位名称",
+						"nullable": true
+					},
+					"workCenterId": {
+						"type": "string",
+						"description": "工位所在工作中心ID",
+						"format": "uuid",
+						"nullable": true
+					},
+					"workCenterCode": {
+						"type": "string",
+						"description": "工位所在工作中心编码",
+						"nullable": true
+					},
+					"workCenterName": {
+						"type": "string",
+						"description": "工位所在工作中心名称",
+						"nullable": true
+					},
+					"workCenterType": {
+						"type": "string",
+						"description": "工作中心类型：存储、加工、检验",
+						"nullable": true
+					},
+					"workCenterCatagory": {
+						"type": "string",
+						"description": "工作中心类别：\r\n当工作中心性质等于存储时，选项：线边库、普通库\r\n当工作中心性质等于检验时，选项：实验室、检验工站",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false,
+				"description": ""
+			}
+		},
+		"securitySchemes": {
+			"Bearer": {
+				"type": "http",
+				"description": "JWT Authorization header using the Bearer scheme.",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	},
+	"security": [
+		{
+			"Bearer": []
+		}
+	],
+	"tags": [
+		{
+			"name": "Common",
+			"description": "公共"
+		},
+		{
+			"name": "文档"
+		},
+		{
+			"name": "终端应用"
+		},
+		{
+			"name": "终端壳子"
+		}
+	]
+}
