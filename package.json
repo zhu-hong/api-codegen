@@ -1,10 +1,10 @@
 {
-	"name": "@zhuh/openapi-gen",
+	"name": "openapi-tsgen",
 	"private": false,
 	"version": "0.0.0",
 	"type": "module",
 	"bin": {
-		"openapi-gen": "dist/index.js"
+		"openapi-tsgen": "dist/index.js"
 	},
 	"files": [
 		"dist"

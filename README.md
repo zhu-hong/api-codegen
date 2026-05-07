@@ -1,6 +1,6 @@
-# @zhuh/openapi-gen
+# openapi-tsgen
 
-[![npm version](https://img.shields.io/npm/v/@zhuh/openapi-gen.svg)](https://www.npmjs.com/package/@zhuh/openapi-gen)
+[![npm version](https://img.shields.io/npm/v/openapi-tsgen.svg)](https://www.npmjs.com/package/openapi-tsgen)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > 从 OpenAPI/Swagger 规范自动生成 TypeScript API 客户端
@@ -17,9 +17,9 @@
 ## 安装
 
 ```bash
-npm install -g @zhuh/openapi-gen
+npm install -g openapi-tsgen
 # 或
-pnpm add -g @zhuh/openapi-gen
+pnpm add -g openapi-tsgen
 ```
 
 ## 快速开始
@@ -40,7 +40,7 @@ pnpm add -g @zhuh/openapi-gen
 2. 运行生成命令：
 
 ```bash
-openapi-gen
+openapi-tsgen
 ```
 
 3. 查看生成的文件：
