@@ -1,10 +1,23 @@
 {
-	"name": "openapi-tsgen",
+	"name": "@zhuh/oig",
+	"description": "从 OpenAPI/Swagger 规范自动生成 TypeScript API 客户端",
+	"keywords": [
+		"openapi",
+		"swagger",
+		"typescript",
+		"codegen",
+		"api",
+		"client",
+		"axios",
+		"orval",
+		"generator",
+		"cli"
+	],
 	"private": false,
 	"version": "8.9.1",
 	"type": "module",
 	"bin": {
-		"openapi-tsgen": "dist/index.js"
+		"@zhuh/oig": "dist/index.js"
 	},
 	"files": [
 		"dist"
