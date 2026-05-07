@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
-import { parse, relative } from 'node:path/posix'
+import { resolve, parse, relative } from 'node:path/posix'
 import * as p from '@clack/prompts'
 import { isString, kebab } from '@orval/core'
 import {
