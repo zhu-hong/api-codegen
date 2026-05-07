@@ -2,7 +2,8 @@
 	"api_addresses": [
 		{
 			"definition": "common/legacy",
-			"address": "schemas/legacy.json(不再支持swagger2.0)",
+			"address": "schemas/legacy.json",
+			"tip": "(不再支持swagger2.0)",
 			"generate": false
 		},
 		{
