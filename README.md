@@ -10,16 +10,14 @@
 - 从 OpenAPI 协议直接生成高质量完整可用的 TS
 - 支持本地文件和远程 URL
 - 自动生成类型定义和 API 函数
-- 基于 axios 的 HTTP 客户端封装
+- 基于 axios 的 HTTP 客户端实例封装
 - 自动格式化生成的代码（Biome）
 - 批量生成多个 API
 
-## 安装
+## 使用
 
 ```bash
-npm install -g @zhuh/oig
-# 或
-pnpm add -g @zhuh/oig
+npx @zhuh/oig
 ```
 
 ## 快速开始
@@ -31,6 +29,7 @@ pnpm add -g @zhuh/oig
   "api_addresses": [
     {
       "definition": "petstore",
+      "generate": false,
       "address": "https://petstore.swagger.io/v2/swagger.json"
     }
   ]
@@ -40,7 +39,7 @@ pnpm add -g @zhuh/oig
 2. 运行生成命令：
 
 ```bash
-@zhuh/oig
+npx @zhuh/oig
 ```
 
 3. 查看生成的文件：
@@ -76,32 +75,3 @@ src/api/petstore/
 - `[tag].schema.ts` — 标签专用 schema
 - `[tag].ts` — 标签 API 实现（基于 axios）
 - `_export.ts` — 汇总导出文件
-
-## HTTP 客户端
-
-生成的代码使用 `src/api/_http.ts` 封装的 axios 实例：
-
-- 自动处理业务错误码（`data.code !== 0`）
-- 60 秒超时
-- 支持自定义配置
-
-## 开发
-
-```bash
-# 构建
-pnpm build
-
-# 格式化
-pnpm format
-```
-
-## 技术栈
-
-- TypeScript + Rollup
-- Biome（代码格式化）
-- @zhuh/orval（代码生成核心）
-- pnpm（包管理）
-
-## 许可证
-
-MIT
