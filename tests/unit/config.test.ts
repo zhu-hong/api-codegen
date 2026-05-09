@@ -1,5 +1,3 @@
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 vi.mock('node:fs/promises', async () => {
@@ -33,7 +31,7 @@ describe('loadConfig', () => {
 		const { readFile } = await import('node:fs/promises')
 		;(readFile as any).mockResolvedValue(JSON.stringify(config))
 
-		const { loadConfig } = await import('../../../src/utils/config')
+		const { loadConfig } = await import('../../src/utils/config')
 		const result = await loadConfig()
 
 		expect(result.api_addresses).toHaveLength(1)
@@ -60,10 +58,12 @@ describe('loadConfig', () => {
 		const { readFile } = await import('node:fs/promises')
 		;(readFile as any).mockResolvedValue(JSON.stringify(config))
 
-		const { loadConfig } = await import('../../../src/utils/config')
+		const { loadConfig } = await import('../../src/utils/config')
 		const result = await loadConfig()
 
-		const enabled = result.api_addresses.filter((a) => a.generate !== false)
+		const enabled = result.api_addresses.filter(
+			(a: { generate?: boolean }) => a.generate !== false,
+		)
 		expect(enabled).toHaveLength(1)
 		expect(enabled[0].definition).toBe('enabled')
 	})
@@ -80,7 +80,7 @@ describe('loadConfig', () => {
 		const { readFile } = await import('node:fs/promises')
 		;(readFile as any).mockResolvedValue(JSON.stringify(config))
 
-		const { loadConfig } = await import('../../../src/utils/config')
+		const { loadConfig } = await import('../../src/utils/config')
 		const result = await loadConfig()
 
 		expect(result.api_addresses).toHaveLength(3)
@@ -90,7 +90,7 @@ describe('loadConfig', () => {
 		const { readFile } = await import('node:fs/promises')
 		;(readFile as any).mockRejectedValue(new Error('ENOENT'))
 
-		const { loadConfig } = await import('../../../src/utils/config')
+		const { loadConfig } = await import('../../src/utils/config')
 
 		await expect(loadConfig()).rejects.toThrow('ENOENT')
 	})
@@ -99,7 +99,7 @@ describe('loadConfig', () => {
 		const { readFile } = await import('node:fs/promises')
 		;(readFile as any).mockResolvedValue('invalid json')
 
-		const { loadConfig } = await import('../../../src/utils/config')
+		const { loadConfig } = await import('../../src/utils/config')
 
 		await expect(loadConfig()).rejects.toThrow()
 	})

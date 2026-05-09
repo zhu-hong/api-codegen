@@ -1,4 +1,4 @@
-import { access, mkdir, readdir, rm, writeFile } from 'node:fs/promises'
+import { access, mkdir, rm, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
