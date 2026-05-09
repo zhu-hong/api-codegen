@@ -31,7 +31,7 @@ describe('loadConfig', () => {
 		const { readFile } = await import('node:fs/promises')
 		;(readFile as any).mockResolvedValue(JSON.stringify(config))
 
-		const { loadConfig } = await import('../../src/utils/config')
+		const { loadConfig } = await import('@/utils/config')
 		const result = await loadConfig()
 
 		expect(result.api_addresses).toHaveLength(1)
@@ -58,7 +58,7 @@ describe('loadConfig', () => {
 		const { readFile } = await import('node:fs/promises')
 		;(readFile as any).mockResolvedValue(JSON.stringify(config))
 
-		const { loadConfig } = await import('../../src/utils/config')
+		const { loadConfig } = await import('@/utils/config')
 		const result = await loadConfig()
 
 		const enabled = result.api_addresses.filter(
@@ -80,7 +80,7 @@ describe('loadConfig', () => {
 		const { readFile } = await import('node:fs/promises')
 		;(readFile as any).mockResolvedValue(JSON.stringify(config))
 
-		const { loadConfig } = await import('../../src/utils/config')
+		const { loadConfig } = await import('@/utils/config')
 		const result = await loadConfig()
 
 		expect(result.api_addresses).toHaveLength(3)
@@ -90,7 +90,7 @@ describe('loadConfig', () => {
 		const { readFile } = await import('node:fs/promises')
 		;(readFile as any).mockRejectedValue(new Error('ENOENT'))
 
-		const { loadConfig } = await import('../../src/utils/config')
+		const { loadConfig } = await import('@/utils/config')
 
 		await expect(loadConfig()).rejects.toThrow('ENOENT')
 	})
@@ -99,7 +99,7 @@ describe('loadConfig', () => {
 		const { readFile } = await import('node:fs/promises')
 		;(readFile as any).mockResolvedValue('invalid json')
 
-		const { loadConfig } = await import('../../src/utils/config')
+		const { loadConfig } = await import('@/utils/config')
 
 		await expect(loadConfig()).rejects.toThrow()
 	})

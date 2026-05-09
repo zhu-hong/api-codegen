@@ -24,7 +24,7 @@ describe('writeCommonSchema', () => {
 	})
 
 	it('应写入 _schemas.gen.ts 文件', async () => {
-		const { writeCommonSchema } = await import('../../../src/generators/schema')
+		const { writeCommonSchema } = await import('@/generators/schema')
 		const schemas = [
 			{
 				name: 'Result',
@@ -42,7 +42,7 @@ describe('writeCommonSchema', () => {
 	})
 
 	it('无 schema 时不生成文件', async () => {
-		const { writeCommonSchema } = await import('../../../src/generators/schema')
+		const { writeCommonSchema } = await import('@/generators/schema')
 		const schemas = [
 			{
 				name: 'Empty',
@@ -62,7 +62,7 @@ describe('writeCommonSchema', () => {
 	})
 
 	it('应合并多个 schema', async () => {
-		const { writeCommonSchema } = await import('../../../src/generators/schema')
+		const { writeCommonSchema } = await import('@/generators/schema')
 		const schemas = [
 			{
 				name: 'Schema1',

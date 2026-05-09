@@ -1,7 +1,7 @@
 import { mkdir, readFile, rm } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { generateTagFiles } from '../../../src/generators/tag'
+import { generateTagFiles } from '@/generators/tag'
 
 describe('generateTagFiles', () => {
 	const testDir = resolve('test-tag-temp')

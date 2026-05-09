@@ -1,7 +1,7 @@
 import { mkdir, readFile, rm } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { writeExportFile } from '../../../src/generators/export'
+import { writeExportFile } from '@/generators/export'
 
 describe('writeExportFile', () => {
 	const testDir = resolve('test-export-temp')

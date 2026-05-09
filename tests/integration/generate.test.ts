@@ -71,7 +71,7 @@ afterEach(async () => {
 
 describe('generateAPIFile', () => {
 	it('应成功生成 API 文件', async () => {
-		const { generateAPIFile } = await import('../../src/generators')
+		const { generateAPIFile } = await import('@/generators')
 
 		await generateAPIFile(
 			{
@@ -88,7 +88,7 @@ describe('generateAPIFile', () => {
 	})
 
 	it('应生成正确的导出文件', async () => {
-		const { generateAPIFile } = await import('../../src/generators')
+		const { generateAPIFile } = await import('@/generators')
 
 		await generateAPIFile(
 			{
@@ -103,7 +103,7 @@ describe('generateAPIFile', () => {
 	})
 
 	it('应为不同的 tags 生成独立文件', async () => {
-		const { generateAPIFile } = await import('../../src/generators')
+		const { generateAPIFile } = await import('@/generators')
 
 		await generateAPIFile(
 			{
@@ -126,7 +126,7 @@ describe('generateAPIFile', () => {
 	})
 
 	it('应生成 _schemas.gen.ts 文件', async () => {
-		const { generateAPIFile } = await import('../../src/generators')
+		const { generateAPIFile } = await import('@/generators')
 
 		await generateAPIFile(
 			{
@@ -143,7 +143,7 @@ describe('generateAPIFile', () => {
 	})
 
 	it('应生成可读的 TypeScript 代码', async () => {
-		const { generateAPIFile } = await import('../../src/generators')
+		const { generateAPIFile } = await import('@/generators')
 
 		await generateAPIFile(
 			{

@@ -14,7 +14,7 @@ describe('runBiomeFormat', () => {
 	})
 
 	it('应调用 execa 执行 biome 格式化', async () => {
-		const { runBiomeFormat } = await import('../../../src/utils/format')
+		const { runBiomeFormat } = await import('@/utils/format')
 		const { execa } = await import('execa')
 
 		await runBiomeFormat('/test/dir', false)
@@ -32,7 +32,7 @@ describe('runBiomeFormat', () => {
 	})
 
 	it('execa 失败时非 dev 模式不应输出警告', async () => {
-		const { runBiomeFormat } = await import('../../../src/utils/format')
+		const { runBiomeFormat } = await import('@/utils/format')
 		const { execa } = await import('execa')
 		const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
 
@@ -45,7 +45,7 @@ describe('runBiomeFormat', () => {
 	})
 
 	it('execa 失败时 dev 模式应输出警告', async () => {
-		const { runBiomeFormat } = await import('../../../src/utils/format')
+		const { runBiomeFormat } = await import('@/utils/format')
 		const { execa } = await import('execa')
 		const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
 
@@ -61,7 +61,7 @@ describe('runBiomeFormat', () => {
 	})
 
 	it('应传递正确的目录参数', async () => {
-		const { runBiomeFormat } = await import('../../../src/utils/format')
+		const { runBiomeFormat } = await import('@/utils/format')
 		const { execa } = await import('execa')
 
 		await runBiomeFormat('/custom/path', false)

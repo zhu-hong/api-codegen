@@ -19,7 +19,7 @@ describe('ensureDir', () => {
 	})
 
 	it('目录不存在时应创建目录', async () => {
-		const { ensureDir } = await import('../../../src/utils/fs')
+		const { ensureDir } = await import('@/utils/fs')
 
 		await ensureDir('test-fs-temp', false)
 
@@ -30,7 +30,7 @@ describe('ensureDir', () => {
 	})
 
 	it('目录存在时应调用 deleteAsync 清理', async () => {
-		const { ensureDir } = await import('../../../src/utils/fs')
+		const { ensureDir } = await import('@/utils/fs')
 		const { deleteAsync } = await import('del')
 
 		await mkdir(testDir, { recursive: true })
@@ -42,7 +42,7 @@ describe('ensureDir', () => {
 	})
 
 	it('deleteAsync 失败时非 dev 模式不应抛出错误', async () => {
-		const { ensureDir } = await import('../../../src/utils/fs')
+		const { ensureDir } = await import('@/utils/fs')
 		const { deleteAsync } = await import('del')
 
 		await mkdir(testDir, { recursive: true })
@@ -52,7 +52,7 @@ describe('ensureDir', () => {
 	})
 
 	it('deleteAsync 失败时 dev 模式应输出警告', async () => {
-		const { ensureDir } = await import('../../../src/utils/fs')
+		const { ensureDir } = await import('@/utils/fs')
 		const { deleteAsync } = await import('del')
 		const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
 
@@ -66,7 +66,7 @@ describe('ensureDir', () => {
 	})
 
 	it('目录不存在时应创建嵌套目录', async () => {
-		const { ensureDir } = await import('../../../src/utils/fs')
+		const { ensureDir } = await import('@/utils/fs')
 		const nestedDir = resolve('test-fs-temp', 'nested', 'deep')
 
 		await ensureDir('test-fs-temp/nested/deep', false)
