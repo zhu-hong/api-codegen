@@ -1,0 +1,95 @@
+{
+	"openapi": "3.0.1",
+	"info": {
+		"title": "Simple Test API",
+		"version": "1.0"
+	},
+	"paths": {
+		"/api/test": {
+			"get": {
+				"tags": ["Test"],
+				"summary": "测试接口",
+				"operationId": "api-test-Get",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Result"
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Test"],
+				"summary": "创建测试",
+				"operationId": "api-test-Post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/api/item/{id}": {
+			"get": {
+				"tags": ["Item"],
+				"summary": "获取项目",
+				"operationId": "api-item-id-Get",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"Result": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"type": "integer"
+					},
+					"message": {
+						"type": "string"
+					}
+				}
+			},
+			"CreateRequest": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	}
+}
