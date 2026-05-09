@@ -1,5 +1,5 @@
 import { writeFile } from 'node:fs/promises'
-import { resolve } from 'node:path/posix'
+import { resolve } from 'node:path'
 import { isString } from '@orval/core'
 import { getApiSchemas } from '@zhuh/orval'
 

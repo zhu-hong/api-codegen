@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises'
-import { resolve } from 'node:path/posix'
+import { resolve } from 'node:path'
 
 export type Config = {
 	api_addresses: {

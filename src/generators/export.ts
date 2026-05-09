@@ -1,5 +1,5 @@
 import { writeFile } from 'node:fs/promises'
-import { parse, resolve } from 'node:path/posix'
+import { parse, resolve } from 'node:path'
 
 export async function writeExportFile(
 	outdir: string,

@@ -1,5 +1,5 @@
 import { access, mkdir } from 'node:fs/promises'
-import { resolve } from 'node:path/posix'
+import { resolve } from 'node:path'
 import { deleteAsync } from 'del'
 
 export async function ensureDir(dir: string, isDev: boolean): Promise<void> {

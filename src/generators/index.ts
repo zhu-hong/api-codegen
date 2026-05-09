@@ -1,4 +1,4 @@
-import { resolve } from 'node:path/posix'
+import { resolve } from 'node:path'
 import { isString } from '@orval/core'
 import {
 	_effect_getApiBuilder,

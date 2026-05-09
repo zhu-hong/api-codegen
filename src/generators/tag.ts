@@ -1,5 +1,5 @@
 import { writeFile } from 'node:fs/promises'
-import { relative, resolve } from 'node:path/posix'
+import { relative, resolve } from 'node:path'
 import { kebab } from '@orval/core'
 import type { SchemaItem } from './schema'
 
