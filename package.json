@@ -25,6 +25,7 @@
 	"scripts": {
 		"build": "rollup -c ./rollup.config.ts --configImportAttributesKey with",
 		"format": "biome check --write . --use-editorconfig=true",
+		"typecheck": "tsc --noEmit",
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"test:coverage": "vitest run --coverage",
