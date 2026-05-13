@@ -14,7 +14,7 @@
 		"cli"
 	],
 	"private": false,
-	"version": "8.9.1",
+	"version": "8.10.0",
 	"type": "module",
 	"bin": {
 		"@zhuh/oig": "dist/index.js"
